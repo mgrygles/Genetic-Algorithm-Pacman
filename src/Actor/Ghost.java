@@ -37,7 +37,11 @@ public class Ghost extends Actor {
 
     @Override
     public void collision(Actor other) {
-
+        if(other instanceof Ghost) {
+            //System.out.println("Collision");
+        } else {
+            other.die();
+        }
     }
 
     @Override

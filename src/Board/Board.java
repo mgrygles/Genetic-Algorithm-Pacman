@@ -1,10 +1,7 @@
 package Board;
 import Actor.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by ahanes on 2/15/15.
@@ -17,8 +14,10 @@ public class Board {
     private BoardNode ghostSpawn;
     private BoardNode playerSpawn;
     private List<Actor> actors;
+    private HashMap<Actor, BoardNode> locations;
 
     public Board(File text) throws FileNotFoundException {
+        this.locations = new HashMap<Actor, BoardNode>();
         this.actors = new LinkedList<Actor>();
         this.board = this.boardListToArray(this.readBoard(text));
     }
@@ -26,12 +25,16 @@ public class Board {
     public void boardTick() {
         for(Actor a : this.actors) {
             if(a.isActive()) {
-                a.move();
+                BoardNode last = a.getLocation();
+                if(!last.getNeighbors(a).contains(a.move())) {
+                    System.err.println("Actor made invalid move!");
+                    System.exit(1);
+                }
             }
         }
         for(Actor a : this.actors) {
             for(Actor b : this.actors) {
-                if(a.getLocation() == b.getLocation()) {
+                if(a.getLocation() == b.getLocation() && !a.equals(b)) {
                     a.collision(b);
                 }
             }
@@ -39,11 +42,13 @@ public class Board {
     }
 
     public void registerActor(Actor a) {
+        this.locations.put(a, a.getLocation());
         this.actors.add(a);
     }
 
     public void deregisterActor(Actor a) {
         this.actors.remove(a);
+        this.locations.remove(a);
     }
 
     protected ArrayList<ArrayList<BoardNode>> readBoard(File text) throws FileNotFoundException {
