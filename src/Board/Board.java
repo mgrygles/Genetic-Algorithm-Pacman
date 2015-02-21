@@ -8,18 +8,38 @@ import java.util.*;
  */
 public class Board {
 
+    public BoardNode[][] getBoard() {
+        return board;
+    }
+
+    public void setBoard(BoardNode[][] board) {
+        this.board = board;
+    }
+
     private BoardNode[][] board;
 
 
     private BoardNode ghostSpawn;
     private BoardNode playerSpawn;
     private List<Actor> actors;
+
+    public int getCols() {
+        return cols;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    private int rows, cols;
     private HashMap<Actor, BoardNode> locations;
 
     public Board(File text) throws FileNotFoundException {
         this.locations = new HashMap<Actor, BoardNode>();
         this.actors = new LinkedList<Actor>();
         this.board = this.boardListToArray(this.readBoard(text));
+        this.rows = board.length;
+        this.cols = board[0].length;
     }
 
     public void boardTick() {

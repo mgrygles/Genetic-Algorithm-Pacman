@@ -5,10 +5,11 @@ import java.util.List;
 
 import Actor.*;
 import Board.*;
+import UI.PacmanUI;
 
 public class Main {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, Exception {
         Board board = new Board(new File("board.txt"));
         List<Actor> actors = new ArrayList<Actor>();
         for(int i = 0; i < 4; ++i) {
@@ -18,9 +19,11 @@ public class Main {
             assert(board.getGhostSpawn() != null);
             a.spawn(board.getGhostSpawn());
         }
-        for(int i = 0; i < 100; ++i) {
-            System.out.println(board.toString());
+        PacmanUI u = new PacmanUI(board);
+        for(int i = 0; i < 10; ++i) {
             board.boardTick();
+            u.redrawGrid(board);
+            Thread.sleep(100);
         }
     }
 }
