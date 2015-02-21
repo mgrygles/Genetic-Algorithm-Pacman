@@ -1,6 +1,6 @@
-package Board;
+package board.tiles;
 
-import Actor.Actor;
+import actors.Actor;
 
 import java.util.ArrayList;
 import java.util.HashMap;

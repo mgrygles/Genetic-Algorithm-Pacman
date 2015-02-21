@@ -1,4 +1,4 @@
-package Board;
+package board.tiles;
 
 /**
  * Created by ahanes on 2/19/15.

@@ -1,6 +1,6 @@
-package Board;
+package board.tiles;
 
-import Actor.Actor;
+import actors.Actor;
 
 /**
  * Created by ahanes on 2/16/15.

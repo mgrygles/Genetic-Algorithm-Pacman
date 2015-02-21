@@ -1,8 +1,8 @@
-package UI;
+package ui;
 
-import Actor.Actor;
-import Board.Board;
-import Board.BoardNode;
+import actors.Actor;
+import board.Board;
+import board.tiles.BoardNode;
 
 import javax.swing.*;
 import java.awt.*;

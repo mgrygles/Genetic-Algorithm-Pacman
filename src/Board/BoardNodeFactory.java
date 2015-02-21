@@ -1,4 +1,6 @@
-package Board;
+package board;
+
+import board.tiles.*;
 
 /**
  * Created by ahanes on 2/16/15.

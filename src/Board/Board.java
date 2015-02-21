@@ -1,6 +1,9 @@
-package Board;
+package board;
 
-import Actor.Actor;
+import actors.Actor;
+import board.tiles.BoardNode;
+import board.tiles.GhostSpawnNode;
+import board.tiles.PlayerSpawnNode;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -58,7 +61,7 @@ public class Board {
             if (a.isActive()) {
                 BoardNode last = a.getLocation();
                 if (!last.getNeighbors(a).contains(a.move())) {
-                    System.err.println("Actor made invalid move!");
+                    System.err.println("actors made invalid move!");
                     System.exit(1);
                 }
             }

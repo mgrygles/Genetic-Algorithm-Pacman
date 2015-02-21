@@ -1,7 +1,7 @@
-package Actor;
+package actors;
 
-import Board.Board;
-import Board.BoardNode;
+import board.Board;
+import board.tiles.BoardNode;
 
 import java.awt.*;
 import java.util.Random;

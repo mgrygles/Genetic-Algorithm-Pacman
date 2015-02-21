@@ -1,6 +1,6 @@
-package Board;
+package board;
 
-import Actor.Actor;
+import actors.Actor;
 
 import java.util.LinkedList;
 import java.util.List;
