@@ -2,6 +2,9 @@ package Actor;
 
 import Board.*;
 
+import java.awt.*;
+import java.util.Random;
+
 /**
  * Created by ahanes on 2/15/15.
  */
@@ -10,9 +13,17 @@ public abstract class Actor {
     protected BoardNode location;
     protected Board board;
 
+    public Color getColor() {
+        return color;
+    }
+
+    protected Color color;
+
     protected Actor(Board board) {
         this.active = false;
         this.location = null;
+        Random rng = new Random();
+        this.color = new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
     }
 
     public BoardNode getLocation() {
@@ -40,6 +51,7 @@ public abstract class Actor {
         this.setLocation(start);
         this.setActive(true);
     }
+    public abstract void spawn();
     public abstract void collision(Actor other);
 
     public boolean isActive() {

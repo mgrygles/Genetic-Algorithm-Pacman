@@ -2,7 +2,9 @@ package Actor;
 
 import Board.*;
 
+import java.awt.*;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +15,7 @@ public class Ghost extends Actor {
     private int velocity = 0;
     private Random rng;
     private BoardNode last;
+
     public Ghost(Board b) {
         super(b);
         this.rng = new Random();
@@ -33,6 +36,11 @@ public class Ghost extends Actor {
     public void spawn(BoardNode start) {
         super.spawn(start);
         this.last = start;
+    }
+
+    @Override
+    public void spawn() {
+        super.spawn(this.board.getGhostSpawn());
     }
 
     @Override

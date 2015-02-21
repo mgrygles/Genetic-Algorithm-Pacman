@@ -16,14 +16,14 @@ public class Main {
             Actor a = new Ghost(board);
             actors.add(new Ghost(board));
             board.registerActor(a);
-            assert(board.getGhostSpawn() != null);
             a.spawn(board.getGhostSpawn());
         }
         PacmanUI u = new PacmanUI(board);
-        for(int i = 0; i < 10; ++i) {
+        for(int i = 0; i < 10000; ++i) {
             board.boardTick();
             u.redrawGrid(board);
             Thread.sleep(100);
+            System.out.println(board.toString());
         }
     }
 }

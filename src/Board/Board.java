@@ -16,11 +16,18 @@ public class Board {
         this.board = board;
     }
 
+    private BoardSpawner spawnQueue;
+
     private BoardNode[][] board;
 
 
     private BoardNode ghostSpawn;
     private BoardNode playerSpawn;
+
+    public List<Actor> getActors() {
+        return actors;
+    }
+
     private List<Actor> actors;
 
     public int getCols() {
@@ -40,9 +47,14 @@ public class Board {
         this.board = this.boardListToArray(this.readBoard(text));
         this.rows = board.length;
         this.cols = board[0].length;
+        this.spawnQueue = new BoardSpawner();
     }
 
     public void boardTick() {
+        List<Actor> spawns = spawnQueue.tick();
+        for(Actor a : spawns) {
+            a.spawn();
+        }
         for(Actor a : this.actors) {
             if(a.isActive()) {
                 BoardNode last = a.getLocation();

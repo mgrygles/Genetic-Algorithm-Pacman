@@ -5,6 +5,7 @@ import java.awt.*;
 import java.util.HashMap;
 
 import Board.*;
+import Actor.*;
 
 /**
  * Created by ahanes on 2/19/15.
@@ -67,10 +68,21 @@ public class PacmanUI extends JFrame {
     }
 
     public void redrawGrid(Board b) {
+        HashMap<CoordPair, Actor> actors= new HashMap<CoordPair, Actor>();
+        for(Actor a : b.getActors()) {
+            actors.put(new CoordPair(a.getLocation().getX(), a.getLocation().getY()), a);
+        }
         for(BoardNode[] row : b.getBoard()) {
             for(BoardNode node : row) {
                 CoordPair c = new CoordPair(node.getX(), node.getY());
-                map.get(c).setText(node.toString());
+                if(!actors.containsKey(c)) {
+                    map.get(c).setText(node.toString());
+                    map.get(c).setForeground(Color.BLACK);
+                }
+                else {
+                    map.get(c).setText(actors.get(c).toString());
+                    map.get(c).setForeground(actors.get(c).getColor());
+                }
             }
         }
         this.revalidate();
