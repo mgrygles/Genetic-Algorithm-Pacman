@@ -1,6 +1,8 @@
 package board.tiles;
 
 import actors.Actor;
+import actors.Ghost;
+import actors.Player;
 
 /**
  * Created by ahanes on 2/16/15.
@@ -21,15 +23,13 @@ public class WalkableNode extends BoardNode {
 
     public void activate(Actor a) {
         //TODO Handle player
+        if(a instanceof Player)
+            this.hasWalked = true;
         super.activate(a);
     }
 
     @Override
     public String toString() {
-        String s = super.toString();
-        if (s.equals(" ") && !hasWalked) {
-            return ".";
-        }
-        return s;
+        return (this.hasWalked) ? " " : ".";
     }
 }

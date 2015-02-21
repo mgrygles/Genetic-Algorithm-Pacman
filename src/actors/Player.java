@@ -10,11 +10,11 @@ import java.util.Random;
 /**
  * Created by ahanes on 2/19/15.
  */
-public class Ghost extends Actor {
+public class Player extends Actor {
     private Random rng;
     private BoardNode last;
 
-    public Ghost(Board b) {
+    public Player(Board b) {
         super(b);
         this.rng = new Random();
         this.last = null;
@@ -32,6 +32,10 @@ public class Ghost extends Actor {
         return this.getLocation();
     }
 
+    public void die() {
+        board.gameOver();
+    }
+
     @Override
     public void spawn(BoardNode start) {
         super.spawn(start);
@@ -45,10 +49,11 @@ public class Ghost extends Actor {
 
     @Override
     public void collision(Actor other) {
+        board.gameOver();
     }
 
     @Override
     public String toString() {
-        return "H";
+        return "<";
     }
 }

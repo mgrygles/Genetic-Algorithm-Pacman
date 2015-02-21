@@ -1,5 +1,6 @@
 import actors.Actor;
 import actors.Ghost;
+import actors.Player;
 import board.Board;
 import ui.PacmanUI;
 
@@ -19,12 +20,16 @@ public class Main {
             board.registerActor(a);
             a.spawn(board.getGhostSpawn());
         }
+        Player p = new Player(board);
+        actors.add(p);
+        board.registerActor(p);
+        p.spawn(board.getPlayerSpawn());
         PacmanUI u = new PacmanUI(board);
-        for (int i = 0; i < 10000; ++i) {
+        while(!board.isOver()) {
             board.boardTick();
             u.redrawGrid(board);
             Thread.sleep(100);
-            System.out.println(board.toString());
         }
+        System.out.println("Game Over");
     }
 }

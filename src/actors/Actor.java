@@ -11,11 +11,12 @@ import java.util.Random;
  */
 public abstract class Actor {
     protected boolean active;
-    protected BoardNode location;
+    private BoardNode location;
     protected Board board;
     protected Color color;
 
     protected Actor(Board board) {
+        this.board = board;
         this.active = false;
         this.location = null;
         Random rng = new Random();
@@ -31,6 +32,7 @@ public abstract class Actor {
     }
 
     protected void setLocation(BoardNode location) {
+        location.activate(this);
         this.location = location;
     }
 

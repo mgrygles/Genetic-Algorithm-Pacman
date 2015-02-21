@@ -57,6 +57,11 @@ public class Board {
         for (Actor a : spawns) {
             if(a.isActive()) a.spawn();
         }
+        for(BoardNode[] b : this.board) {
+            for(BoardNode a : b) {
+                a.deactivate();
+            }
+        }
         for (Actor a : this.actors) {
             if (a.isActive()) {
                 BoardNode last = a.getLocation();
@@ -152,5 +157,14 @@ public class Board {
 
     public BoardNode getGhostSpawn() {
         return ghostSpawn;
+    }
+
+    public boolean isOver() {
+        return over;
+    }
+
+    private boolean over = false;
+    public void gameOver() {
+        this.over = true;
     }
 }
