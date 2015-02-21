@@ -22,6 +22,7 @@ public class Board {
     private List<Actor> actors;
     private int rows, cols;
     private HashMap<Actor, BoardNode> locations;
+    private boolean over = false;
 
     public Board(File text) throws FileNotFoundException {
         this.locations = new HashMap<Actor, BoardNode>();
@@ -55,10 +56,10 @@ public class Board {
     public void boardTick() {
         List<Actor> spawns = spawnQueue.tick();
         for (Actor a : spawns) {
-            if(a.isActive()) a.spawn();
+            if (a.isActive()) a.spawn();
         }
-        for(BoardNode[] b : this.board) {
-            for(BoardNode a : b) {
+        for (BoardNode[] b : this.board) {
+            for (BoardNode a : b) {
                 a.deactivate();
             }
         }
@@ -163,7 +164,6 @@ public class Board {
         return over;
     }
 
-    private boolean over = false;
     public void gameOver() {
         this.over = true;
     }

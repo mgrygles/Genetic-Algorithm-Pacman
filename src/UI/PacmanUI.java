@@ -18,6 +18,7 @@ public class PacmanUI extends JFrame {
     // for reference
     private GridLayout gbl;
     private Board b;
+
     public PacmanUI(Board b) {
         this.b = b;
         this.setTitle("Pacman");

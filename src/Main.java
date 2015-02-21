@@ -1,6 +1,6 @@
 import actors.Actor;
-import actors.Ghost;
 import actors.DumbPlayer;
+import actors.Ghost;
 import board.Board;
 import ui.PacmanUI;
 
@@ -25,7 +25,7 @@ public class Main {
         board.registerActor(p);
         p.spawn(board.getPlayerSpawn());
         PacmanUI u = new PacmanUI(board);
-        while(!board.isOver()) {
+        while (!board.isOver()) {
             board.boardTick();
             u.redrawGrid(board);
             Thread.sleep(100);

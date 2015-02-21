@@ -11,10 +11,10 @@ import java.util.Random;
  */
 public abstract class Actor {
     protected boolean active;
-    private BoardNode location;
     protected Board board;
     protected Color color;
     protected int score;
+    private BoardNode location;
 
     protected Actor(Board board) {
         this.board = board;
@@ -71,8 +71,9 @@ public abstract class Actor {
     }
 
     public void incrScore() {
-        this.score ++;
+        this.score++;
     }
+
     public void incrScore(int n) {
         this.score += n;
     }

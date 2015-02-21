@@ -22,9 +22,9 @@ public class WalkableNode extends BoardNode {
 
     public void activate(Actor a) {
         //TODO Handle player
-        if(a instanceof DumbPlayer)
+        if (a instanceof DumbPlayer)
             a.incrScore();
-            this.hasWalked = true;
+        this.hasWalked = true;
         super.activate(a);
     }
 
