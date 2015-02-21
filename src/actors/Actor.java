@@ -14,6 +14,7 @@ public abstract class Actor {
     private BoardNode location;
     protected Board board;
     protected Color color;
+    protected int score;
 
     protected Actor(Board board) {
         this.board = board;
@@ -21,6 +22,7 @@ public abstract class Actor {
         this.location = null;
         Random rng = new Random();
         this.color = new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
+        this.score = 0;
     }
 
     public Color getColor() {
@@ -66,6 +68,17 @@ public abstract class Actor {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public void incrScore() {
+        this.score ++;
+    }
+    public void incrScore(int n) {
+        this.score += n;
+    }
+
+    public int getScore() {
+        return this.score;
     }
 
     @Override

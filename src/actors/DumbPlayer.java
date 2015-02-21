@@ -10,11 +10,11 @@ import java.util.Random;
 /**
  * Created by ahanes on 2/19/15.
  */
-public class Player extends Actor {
+public class DumbPlayer extends Actor {
     private Random rng;
     private BoardNode last;
 
-    public Player(Board b) {
+    public DumbPlayer(Board b) {
         super(b);
         this.rng = new Random();
         this.last = null;

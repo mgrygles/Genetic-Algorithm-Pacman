@@ -1,8 +1,7 @@
 package board.tiles;
 
 import actors.Actor;
-import actors.Ghost;
-import actors.Player;
+import actors.DumbPlayer;
 
 /**
  * Created by ahanes on 2/16/15.
@@ -23,7 +22,8 @@ public class WalkableNode extends BoardNode {
 
     public void activate(Actor a) {
         //TODO Handle player
-        if(a instanceof Player)
+        if(a instanceof DumbPlayer)
+            a.incrScore();
             this.hasWalked = true;
         super.activate(a);
     }
