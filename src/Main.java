@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException, Exception {
         Board board = new Board(new File("board.txt"));
         List<Actor> actors = new ArrayList<Actor>();
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 10; ++i) {
             Actor a = new Ghost(board);
             actors.add(new Ghost(board));
             board.registerActor(a);

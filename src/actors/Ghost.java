@@ -27,6 +27,7 @@ public class Ghost extends Actor {
         if (choices.size() > 1 && choices.contains(this.last)) {
             choices.remove(this.last); // Don't go backwards
         }
+        this.last = this.getLocation();
         Collections.shuffle(choices);
         this.setLocation(choices.get(0));
         return this.getLocation();

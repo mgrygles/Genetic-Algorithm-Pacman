@@ -55,7 +55,7 @@ public class Board {
     public void boardTick() {
         List<Actor> spawns = spawnQueue.tick();
         for (Actor a : spawns) {
-            a.spawn();
+            if(a.isActive()) a.spawn();
         }
         for (Actor a : this.actors) {
             if (a.isActive()) {
