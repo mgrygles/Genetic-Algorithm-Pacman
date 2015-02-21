@@ -15,10 +15,6 @@ import java.util.*;
  */
 public class Board {
 
-    public BoardSpawner getSpawnQueue() {
-        return spawnQueue;
-    }
-
     private BoardSpawner spawnQueue;
     private BoardNode[][] board;
     private BoardNode ghostSpawn;
@@ -27,7 +23,6 @@ public class Board {
     private int rows, cols;
     private HashMap<Actor, BoardNode> locations;
     private boolean over = false;
-
     public Board(File text) throws FileNotFoundException {
         this.locations = new HashMap<Actor, BoardNode>();
         this.actors = new LinkedList<Actor>();
@@ -35,6 +30,10 @@ public class Board {
         this.rows = board.length;
         this.cols = board[0].length;
         this.spawnQueue = new BoardSpawner();
+    }
+
+    public BoardSpawner getSpawnQueue() {
+        return spawnQueue;
     }
 
     public BoardNode[][] getBoard() {

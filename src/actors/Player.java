@@ -7,16 +7,16 @@ import board.Board;
  */
 public abstract class Player extends Actor {
     protected int invulnTicks;
+
     protected Player(Board board) {
         super(board);
         this.invulnTicks = 0;
     }
 
     protected void tick() {
-        if(this.invulnTicks > 0) {
+        if (this.invulnTicks > 0) {
             this.invulnTicks--;
-        }
-        else{
+        } else {
             this.invulnTicks = 0;
         }
     }
@@ -31,11 +31,10 @@ public abstract class Player extends Actor {
 
     @Override
     public void collision(Actor other) {
-        if(this.invulnerable()) {
+        if (this.invulnerable()) {
             other.die();
             this.incrScore(100);
-        }
-        else {
+        } else {
             board.gameOver();
         }
     }

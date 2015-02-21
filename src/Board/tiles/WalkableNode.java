@@ -1,6 +1,7 @@
 package board.tiles;
 
-import actors.*;
+import actors.Actor;
+import actors.Player;
 
 /**
  * Created by ahanes on 2/16/15.
@@ -33,7 +34,7 @@ public class WalkableNode extends BoardNode {
             this.hasWalked = true;
             a.incrScore();
         }
-        if(this.hasPowerup && a instanceof Player) {
+        if (this.hasPowerup && a instanceof Player) {
             this.hasPowerup = false;
             ((Player) a).addInvuln(15);
         }
