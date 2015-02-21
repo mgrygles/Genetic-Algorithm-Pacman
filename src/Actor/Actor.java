@@ -1,6 +1,7 @@
 package Actor;
 
-import Board.*;
+import Board.Board;
+import Board.BoardNode;
 
 import java.awt.*;
 import java.util.Random;
@@ -12,11 +13,6 @@ public abstract class Actor {
     protected boolean active;
     protected BoardNode location;
     protected Board board;
-
-    public Color getColor() {
-        return color;
-    }
-
     protected Color color;
 
     protected Actor(Board board) {
@@ -24,6 +20,10 @@ public abstract class Actor {
         this.location = null;
         Random rng = new Random();
         this.color = new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public BoardNode getLocation() {
@@ -38,6 +38,7 @@ public abstract class Actor {
         this.active = false;
         this.location = null;
     }
+
     public void die() {
         this.remove();
     }
@@ -47,11 +48,14 @@ public abstract class Actor {
     }
 
     public abstract BoardNode move();
+
     public void spawn(BoardNode start) {
         this.setLocation(start);
         this.setActive(true);
     }
+
     public abstract void spawn();
+
     public abstract void collision(Actor other);
 
     public boolean isActive() {
@@ -62,5 +66,6 @@ public abstract class Actor {
         this.active = active;
     }
 
-    @Override public abstract String toString();
+    @Override
+    public abstract String toString();
 }

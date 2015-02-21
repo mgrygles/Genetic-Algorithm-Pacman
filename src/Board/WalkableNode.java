@@ -1,6 +1,5 @@
 package Board;
 
-import Board.BoardNode;
 import Actor.Actor;
 
 /**
@@ -28,7 +27,7 @@ public class WalkableNode extends BoardNode {
     @Override
     public String toString() {
         String s = super.toString();
-        if(s.equals(" ") && !hasWalked) {
+        if (s.equals(" ") && !hasWalked) {
             return ".";
         }
         return s;

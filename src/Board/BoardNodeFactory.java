@@ -4,7 +4,8 @@ package Board;
  * Created by ahanes on 2/16/15.
  */
 public class BoardNodeFactory {
-    private BoardNodeFactory() {}
+    private BoardNodeFactory() {
+    }
 
     public static BoardNode makeBoardNode(Character c, int x, int y) {
         switch (c) {

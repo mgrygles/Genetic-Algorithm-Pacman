@@ -1,10 +1,9 @@
 package Actor;
 
-import Board.*;
+import Board.Board;
+import Board.BoardNode;
 
-import java.awt.*;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -21,10 +20,11 @@ public class Ghost extends Actor {
         this.rng = new Random();
         this.last = null;
     }
+
     @Override
     public BoardNode move() {
         List<BoardNode> choices = this.getLocation().getNeighbors(this);
-        if(choices.size() > 1 && choices.contains(this.last)) {
+        if (choices.size() > 1 && choices.contains(this.last)) {
             choices.remove(this.last); // Don't go backwards
         }
         Collections.shuffle(choices);
@@ -45,7 +45,7 @@ public class Ghost extends Actor {
 
     @Override
     public void collision(Actor other) {
-        if(other instanceof Ghost) {
+        if (other instanceof Ghost) {
             //System.out.println("Collision");
         } else {
             other.die();
