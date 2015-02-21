@@ -15,6 +15,10 @@ import java.util.*;
  */
 public class Board {
 
+    public BoardSpawner getSpawnQueue() {
+        return spawnQueue;
+    }
+
     private BoardSpawner spawnQueue;
     private BoardNode[][] board;
     private BoardNode ghostSpawn;

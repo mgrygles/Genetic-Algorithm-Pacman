@@ -15,6 +15,8 @@ public class BoardNodeFactory {
                 return new WallNode(x, y);
             case ' ':
                 return new WalkableNode(x, y);
+            case '*':
+                return new WalkableNode(x, y, true);
             case 'S':
                 return new GhostSpawnNode(x, y);
             case 'P':

@@ -50,7 +50,7 @@ public class PacmanUI extends JFrame {
         for (BoardNode[] row : b.getBoard()) {
             for (BoardNode node : row) {
                 CoordPair c = new CoordPair(node.getX(), node.getY());
-                if (!actors.containsKey(c)) {
+                if (!actors.containsKey(c) || !actors.get(c).isActive()) {
                     map.get(c).setText(node.toString());
                     map.get(c).setForeground(Color.BLACK);
                 } else {

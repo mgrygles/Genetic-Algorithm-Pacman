@@ -40,11 +40,11 @@ public abstract class Actor {
 
     public void remove() {
         this.active = false;
-        this.location = null;
     }
 
     public void die() {
         this.remove();
+        this.board.getSpawnQueue().add(this, 15);
     }
 
     public boolean onBoard() {

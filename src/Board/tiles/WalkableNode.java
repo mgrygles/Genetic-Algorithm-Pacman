@@ -1,7 +1,6 @@
 package board.tiles;
 
-import actors.Actor;
-import actors.DumbPlayer;
+import actors.*;
 
 /**
  * Created by ahanes on 2/16/15.
@@ -9,10 +8,18 @@ import actors.DumbPlayer;
 public class WalkableNode extends BoardNode {
 
     private boolean hasWalked;
+    private boolean hasPowerup;
+
+    public WalkableNode(int x, int y, boolean hasPowerup) {
+        super(x, y);
+        this.hasWalked = false;
+        this.hasPowerup = true;
+    }
 
     public WalkableNode(int x, int y) {
         super(x, y);
         this.hasWalked = false;
+        this.hasPowerup = false;
     }
 
     @Override
@@ -22,14 +29,20 @@ public class WalkableNode extends BoardNode {
 
     public void activate(Actor a) {
         //TODO Handle player
-        if (a instanceof DumbPlayer)
+        if (a instanceof Player && !this.hasWalked) {
+            this.hasWalked = true;
             a.incrScore();
-        this.hasWalked = true;
+        }
+        if(this.hasPowerup && a instanceof Player) {
+            this.hasPowerup = false;
+            ((Player) a).addInvuln(15);
+        }
         super.activate(a);
     }
 
     @Override
     public String toString() {
-        return (this.hasWalked) ? " " : ".";
+        String r = (this.hasWalked) ? " " : ".";
+        return (this.hasPowerup) ? "*" : r;
     }
 }

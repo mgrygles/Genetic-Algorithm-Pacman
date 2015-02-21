@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * Created by ahanes on 2/19/15.
  */
-public class DumbPlayer extends Actor {
+public class DumbPlayer extends Player {
     private Random rng;
     private BoardNode last;
 
@@ -22,6 +22,7 @@ public class DumbPlayer extends Actor {
 
     @Override
     public BoardNode move() {
+        this.tick();
         List<BoardNode> choices = this.getLocation().getNeighbors(this);
         if (choices.size() > 1 && choices.contains(this.last)) {
             choices.remove(this.last); // Don't go backwards
@@ -47,10 +48,6 @@ public class DumbPlayer extends Actor {
         this.spawn(this.board.getGhostSpawn());
     }
 
-    @Override
-    public void collision(Actor other) {
-        board.gameOver();
-    }
 
     @Override
     public String toString() {
