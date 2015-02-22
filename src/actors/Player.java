@@ -2,6 +2,8 @@ package actors;
 
 import board.Board;
 
+import java.awt.*;
+
 /**
  * Created by ahanes on 2/21/15.
  */
@@ -11,6 +13,7 @@ public abstract class Player extends Actor {
     protected Player(Board board) {
         super(board);
         this.invulnTicks = 0;
+        this.bgColor = Color.YELLOW;
     }
 
     protected void tick() {

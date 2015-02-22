@@ -26,6 +26,8 @@ public abstract class BoardNode implements BoardDrawable {
         this.y = y;
         actors = new LinkedList<Actor>();
         this.map.put(new Pair(x, y), this);
+        this.fgColor = Color.WHITE;
+        this.bgColor = Color.BLACK;
     }
 
     public int getX() {

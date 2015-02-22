@@ -12,8 +12,6 @@ public class WalkableNode extends BoardNode {
 
     private boolean hasWalked;
     private boolean hasPowerup;
-    private Color fgColor;
-    private Color bgColor;
 
     public WalkableNode(int x, int y, boolean hasPowerup) {
         super(x, y);
@@ -49,6 +47,14 @@ public class WalkableNode extends BoardNode {
     public String toString() {
         String r = (this.hasWalked) ? " " : ".";
         return (this.hasPowerup) ? "*" : r;
+    }
+
+    @Override
+    public Color getForegroundColor() {
+        if(this.hasPowerup) {
+            return Color.RED;
+        }
+        return this.fgColor;
     }
 
     @Override
