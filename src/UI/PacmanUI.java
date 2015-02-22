@@ -1,7 +1,7 @@
 package ui;
 
-import board.actors.Actor;
 import board.Board;
+import board.actors.Actor;
 import board.tiles.BoardNode;
 
 import javax.swing.*;

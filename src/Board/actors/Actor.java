@@ -15,18 +15,8 @@ public abstract class Actor implements BoardDrawable {
     protected Board board;
     protected Color fgColor;
     protected int score;
-    private BoardNode location;
     protected Color bgColor;
-
-    @Override
-    public Color getForegroundColor() {
-        return this.fgColor;
-    }
-
-    @Override
-    public Color getBackgroundColor() {
-        return this.bgColor;
-    }
+    private BoardNode location;
 
     protected Actor(Board board) {
         this.board = board;
@@ -36,6 +26,16 @@ public abstract class Actor implements BoardDrawable {
         this.fgColor = new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
         this.bgColor = Color.WHITE;
         this.score = 0;
+    }
+
+    @Override
+    public Color getForegroundColor() {
+        return this.fgColor;
+    }
+
+    @Override
+    public Color getBackgroundColor() {
+        return this.bgColor;
     }
 
     public BoardNode getLocation() {

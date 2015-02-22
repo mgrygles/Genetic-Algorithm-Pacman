@@ -12,8 +12,8 @@ public class WallNode extends BoardNode {
     public WallNode(int x, int y) {
         super(x, y);
         Random rng = new Random();
-        this.fgColor = new Color(0,0,255);
-        this.bgColor = new Color(0,0,255);
+        this.fgColor = new Color(0, 0, 255);
+        this.bgColor = new Color(0, 0, 255);
     }
 
     @Override

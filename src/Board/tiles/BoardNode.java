@@ -1,7 +1,7 @@
 package board.tiles;
 
-import board.actors.Actor;
 import board.BoardDrawable;
+import board.actors.Actor;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,11 +15,11 @@ import java.util.List;
 public abstract class BoardNode implements BoardDrawable {
 
     private static final HashMap<Pair, BoardNode> map = new HashMap<Pair, BoardNode>();
+    protected Color fgColor;
+    protected Color bgColor;
     private int x;
     private int y;
     private List<Actor> actors;
-    protected Color fgColor;
-    protected Color bgColor;
 
     public BoardNode(int x, int y) throws DuplicateCoordinateException {
         this.x = x;

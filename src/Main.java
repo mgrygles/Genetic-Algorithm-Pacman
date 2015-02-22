@@ -1,7 +1,7 @@
+import board.Board;
 import board.actors.Actor;
 import board.actors.DumbPlayer;
 import board.actors.Ghost;
-import board.Board;
 
 import java.io.File;
 import java.util.ArrayList;

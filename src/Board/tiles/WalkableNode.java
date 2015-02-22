@@ -51,7 +51,7 @@ public class WalkableNode extends BoardNode {
 
     @Override
     public Color getForegroundColor() {
-        if(this.hasPowerup) {
+        if (this.hasPowerup) {
             return Color.RED;
         }
         return this.fgColor;
