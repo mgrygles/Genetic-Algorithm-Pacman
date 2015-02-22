@@ -1,6 +1,6 @@
 package ui;
 
-import actors.Actor;
+import board.actors.Actor;
 import board.Board;
 import board.tiles.BoardNode;
 

@@ -1,4 +1,4 @@
-package actors;
+package board.actors;
 
 import board.Board;
 

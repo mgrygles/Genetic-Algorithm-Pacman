@@ -1,8 +1,7 @@
-import actors.Actor;
-import actors.DumbPlayer;
-import actors.Ghost;
+import board.actors.Actor;
+import board.actors.DumbPlayer;
+import board.actors.Ghost;
 import board.Board;
-import ui.PacmanUI;
 
 import java.io.File;
 import java.util.ArrayList;

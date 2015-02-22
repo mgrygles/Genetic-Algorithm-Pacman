@@ -1,6 +1,6 @@
 package board;
 
-import actors.Actor;
+import board.actors.Actor;
 import board.tiles.BoardNode;
 import board.tiles.GhostSpawnNode;
 import board.tiles.PlayerSpawnNode;
@@ -71,7 +71,7 @@ public class Board {
             if (a.isActive()) {
                 BoardNode last = a.getLocation();
                 if (!last.getNeighbors(a).contains(a.move())) {
-                    System.err.println("actors made invalid move!");
+                    System.err.println("board.actors made invalid move!");
                     System.exit(1);
                 }
             }

@@ -1,7 +1,7 @@
 package board.tiles;
 
-import actors.Actor;
-import actors.Player;
+import board.actors.Actor;
+import board.actors.Player;
 
 import java.awt.*;
 

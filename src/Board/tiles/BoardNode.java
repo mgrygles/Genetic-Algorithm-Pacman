@@ -1,6 +1,6 @@
 package board.tiles;
 
-import actors.Actor;
+import board.actors.Actor;
 import board.BoardDrawable;
 
 import java.awt.*;
