@@ -3,6 +3,8 @@ package board.tiles;
 import actors.Actor;
 import actors.Player;
 
+import java.awt.*;
+
 /**
  * Created by ahanes on 2/16/15.
  */
@@ -10,6 +12,8 @@ public class WalkableNode extends BoardNode {
 
     private boolean hasWalked;
     private boolean hasPowerup;
+    private Color fgColor;
+    private Color bgColor;
 
     public WalkableNode(int x, int y, boolean hasPowerup) {
         super(x, y);
@@ -45,5 +49,11 @@ public class WalkableNode extends BoardNode {
     public String toString() {
         String r = (this.hasWalked) ? " " : ".";
         return (this.hasPowerup) ? "*" : r;
+    }
+
+    @Override
+    public Character getBoardCharacter() {
+        String r = (this.hasWalked) ? " " : ".";
+        return ((this.hasPowerup) ? "*" : r).charAt(0);
     }
 }

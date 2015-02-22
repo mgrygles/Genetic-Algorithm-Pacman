@@ -53,4 +53,9 @@ public class DumbPlayer extends Player {
     public String toString() {
         return "<";
     }
+
+    @Override
+    public Character getBoardCharacter() {
+        return '<';
+    }
 }

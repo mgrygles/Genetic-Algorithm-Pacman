@@ -51,4 +51,9 @@ public class Ghost extends Actor {
     public String toString() {
         return "H";
     }
+
+    @Override
+    public Character getBoardCharacter() {
+        return 'H';
+    }
 }

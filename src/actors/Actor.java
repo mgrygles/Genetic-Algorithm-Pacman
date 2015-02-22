@@ -1,6 +1,7 @@
 package actors;
 
 import board.Board;
+import board.BoardDrawable;
 import board.tiles.BoardNode;
 
 import java.awt.*;
@@ -9,24 +10,32 @@ import java.util.Random;
 /**
  * Created by ahanes on 2/15/15.
  */
-public abstract class Actor {
+public abstract class Actor implements BoardDrawable {
     protected boolean active;
     protected Board board;
-    protected Color color;
+    protected Color fgColor;
     protected int score;
     private BoardNode location;
+    protected Color bgColor;
+
+    @Override
+    public Color getForegroundColor() {
+        return this.fgColor;
+    }
+
+    @Override
+    public Color getBackgroundColor() {
+        return this.bgColor;
+    }
 
     protected Actor(Board board) {
         this.board = board;
         this.active = false;
         this.location = null;
         Random rng = new Random();
-        this.color = new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
+        this.fgColor = new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
+        this.bgColor = Color.WHITE;
         this.score = 0;
-    }
-
-    public Color getColor() {
-        return color;
     }
 
     public BoardNode getLocation() {

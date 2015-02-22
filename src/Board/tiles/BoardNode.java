@@ -1,7 +1,9 @@
 package board.tiles;
 
 import actors.Actor;
+import board.BoardDrawable;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -10,20 +12,19 @@ import java.util.List;
 /**
  * Created by ahanes on 2/15/15.
  */
-public abstract class BoardNode {
+public abstract class BoardNode implements BoardDrawable {
 
     private static final HashMap<Pair, BoardNode> map = new HashMap<Pair, BoardNode>();
     private int x;
     private int y;
     private List<Actor> actors;
+    protected Color fgColor;
+    protected Color bgColor;
 
     public BoardNode(int x, int y) throws DuplicateCoordinateException {
         this.x = x;
         this.y = y;
         actors = new LinkedList<Actor>();
-        //if(this.map.containsKey(new Pair(x, y))) {
-        //   throw new DuplicateCoordinateException(String.format("Coordinates taken: %d, %d", x, y));
-        //}
         this.map.put(new Pair(x, y), this);
     }
 
@@ -81,6 +82,16 @@ public abstract class BoardNode {
     }
 
     public abstract boolean canWalk(Actor a);
+
+    @Override
+    public Color getForegroundColor() {
+        return this.fgColor;
+    }
+
+    @Override
+    public Color getBackgroundColor() {
+        return this.bgColor;
+    }
 
     protected class DuplicateCoordinateException extends RuntimeException {
         public DuplicateCoordinateException(String s) {

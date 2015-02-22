@@ -32,6 +32,9 @@ public class PacmanUI extends JFrame {
         for (BoardNode[] row : b.getBoard()) {
             for (BoardNode node : row) {
                 JLabel n = new JLabel(node.toString());
+                n.setOpaque(true);
+                n.setHorizontalAlignment(SwingConstants.CENTER);
+                n.setVerticalAlignment(SwingConstants.CENTER);
                 CoordPair c = new CoordPair(node.getX(), node.getY());
                 map.put(c, n);
                 this.add(n);
@@ -51,11 +54,13 @@ public class PacmanUI extends JFrame {
             for (BoardNode node : row) {
                 CoordPair c = new CoordPair(node.getX(), node.getY());
                 if (!actors.containsKey(c) || !actors.get(c).isActive()) {
-                    map.get(c).setText(node.toString());
-                    map.get(c).setForeground(Color.BLACK);
+                    map.get(c).setText(node.getBoardCharacter().toString());
+                    map.get(c).setBackground(node.getBackgroundColor());
+                    map.get(c).setForeground(node.getForegroundColor());
                 } else {
-                    map.get(c).setText(actors.get(c).toString());
-                    map.get(c).setForeground(actors.get(c).getColor());
+                    map.get(c).setText(actors.get(c).getBoardCharacter().toString());
+                    map.get(c).setBackground(actors.get(c).getBackgroundColor());
+                    map.get(c).setForeground(actors.get(c).getForegroundColor());
                 }
             }
         }

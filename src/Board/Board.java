@@ -23,6 +23,7 @@ public class Board {
     private int rows, cols;
     private HashMap<Actor, BoardNode> locations;
     private boolean over = false;
+
     public Board(File text) throws FileNotFoundException {
         this.locations = new HashMap<Actor, BoardNode>();
         this.actors = new LinkedList<Actor>();
