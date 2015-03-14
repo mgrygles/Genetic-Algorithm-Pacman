@@ -1,6 +1,7 @@
 package board;
 
 import board.actors.Actor;
+import board.actors.Player;
 import board.tiles.BoardNode;
 import board.tiles.GhostSpawnNode;
 import board.tiles.PlayerSpawnNode;
@@ -14,13 +15,14 @@ import java.util.*;
  * Created by ahanes on 2/15/15.
  */
 public class Board {
-
+    public static final Random rng = new Random(3);
     private BoardSpawner spawnQueue;
     private BoardNode[][] board;
     private BoardNode ghostSpawn;
     private BoardNode playerSpawn;
     private List<Actor> actors;
     private int rows, cols;
+
     private HashMap<Actor, BoardNode> locations;
     private boolean over = false;
 
@@ -77,6 +79,9 @@ public class Board {
             }
         }
         for (Actor a : this.actors) {
+            if(a instanceof Player) {
+                ((Player)a).tick();
+            }
             for (Actor b : this.actors) {
                 if (a.getLocation() == b.getLocation() && !a.equals(b)) {
                     a.collision(b);

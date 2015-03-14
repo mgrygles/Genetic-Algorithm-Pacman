@@ -22,7 +22,7 @@ public abstract class Actor implements BoardDrawable {
         this.board = board;
         this.active = false;
         this.location = null;
-        Random rng = new Random();
+        Random rng = Board.rng;
         this.fgColor = new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
         this.bgColor = Color.WHITE;
         this.score = 0;

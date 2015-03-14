@@ -1,6 +1,7 @@
 package board.actors;
 
 import board.Board;
+import board.tiles.BoardNode;
 
 import java.awt.*;
 
@@ -10,13 +11,13 @@ import java.awt.*;
 public abstract class Player extends Actor {
     protected int invulnTicks;
 
-    protected Player(Board board) {
+    public Player(Board board) {
         super(board);
         this.invulnTicks = 0;
         this.bgColor = Color.YELLOW;
     }
 
-    protected void tick() {
+    public void tick() {
         if (this.invulnTicks > 0) {
             this.invulnTicks--;
         } else {
@@ -40,5 +41,15 @@ public abstract class Player extends Actor {
         } else {
             board.gameOver();
         }
+    }
+
+    @Override
+    public void spawn(BoardNode start) {
+        super.spawn(start);
+    }
+
+    @Override
+    public Character getBoardCharacter() {
+        return '<';
     }
 }

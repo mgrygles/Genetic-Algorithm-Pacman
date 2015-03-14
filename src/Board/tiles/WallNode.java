@@ -1,5 +1,6 @@
 package board.tiles;
 
+import board.Board;
 import board.actors.Actor;
 
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.util.Random;
 public class WallNode extends BoardNode {
     public WallNode(int x, int y) {
         super(x, y);
-        Random rng = new Random();
+        Random rng = Board.rng;
         this.fgColor = new Color(0, 0, 255);
         this.bgColor = new Color(0, 0, 255);
     }

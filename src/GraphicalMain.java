@@ -2,6 +2,8 @@ import board.Board;
 import board.actors.Actor;
 import board.actors.DumbPlayer;
 import board.actors.Ghost;
+import board.actors.Player;
+import board.actors.geneticplayer.GeneticAlgorithmPlayer;
 import ui.PacmanUI;
 
 import java.io.File;
@@ -21,7 +23,7 @@ public class GraphicalMain {
             board.registerActor(a);
             a.spawn(board.getGhostSpawn());
         }
-        DumbPlayer p = new DumbPlayer(board);
+        Player p = new GeneticAlgorithmPlayer(board);
         p.addInvuln(5);
         actors.add(p);
         board.registerActor(p);

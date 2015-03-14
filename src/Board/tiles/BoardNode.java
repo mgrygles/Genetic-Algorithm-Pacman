@@ -16,6 +16,15 @@ public abstract class BoardNode implements BoardDrawable {
 
     private static final HashMap<Pair, BoardNode> map = new HashMap<Pair, BoardNode>();
     protected Color fgColor;
+
+    public Color getBgColor() {
+        return bgColor;
+    }
+
+    public void setBgColor(Color bgColor) {
+        this.bgColor = bgColor;
+    }
+
     protected Color bgColor;
     private int x;
     private int y;

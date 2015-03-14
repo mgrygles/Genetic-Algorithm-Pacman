@@ -16,7 +16,7 @@ public class Ghost extends Actor {
 
     public Ghost(Board b) {
         super(b);
-        this.rng = new Random();
+        this.rng = Board.rng;
         this.last = null;
     }
 
@@ -27,7 +27,7 @@ public class Ghost extends Actor {
             choices.remove(this.last); // Don't go backwards
         }
         this.last = this.getLocation();
-        Collections.shuffle(choices);
+        Collections.shuffle(choices, Board.rng);
         this.setLocation(choices.get(0));
         return this.getLocation();
     }

@@ -47,7 +47,6 @@ public class PacmanUI extends JFrame {
     public void redrawGrid(Board b) {
         HashMap<CoordPair, Actor> actors = new HashMap<CoordPair, Actor>();
         for (Actor a : b.getActors()) {
-            System.out.println(a.toString());
             actors.put(new CoordPair(a.getLocation().getX(), a.getLocation().getY()), a);
         }
         for (BoardNode[] row : b.getBoard()) {
