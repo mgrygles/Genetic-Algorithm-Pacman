@@ -2,6 +2,8 @@ package board;
 
 import board.tiles.*;
 
+import java.util.HashMap;
+
 /**
  * Created by ahanes on 2/16/15.
  */
@@ -9,21 +11,30 @@ public class BoardNodeFactory {
     private BoardNodeFactory() {
     }
 
-    public static BoardNode makeBoardNode(Character c, int x, int y) {
+    public static BoardNode makeBoardNode(HashMap<Pair, BoardNode> map, Character c, int x, int y) {
+        BoardNode b;
         switch (c) {
             case 'X':
-                return new WallNode(x, y);
+                b = new WallNode(x, y);
+                break;
             case ' ':
-                return new WalkableNode(x, y);
+                b = new WalkableNode(x, y);
+                break;
             case '*':
-                return new WalkableNode(x, y, true);
+                b = new WalkableNode(x, y, true);
+                break;
             case 'S':
-                return new GhostSpawnNode(x, y);
+                b = new GhostSpawnNode(x, y);
+                break;
             case 'P':
-                return new PlayerSpawnNode(x, y);
+                b = new PlayerSpawnNode(x, y);
+                break;
             default:
-                //TODO Use other node types
-                return new WalkableNode(x, y);
+                b = new WalkableNode(x, y);
+                break;
         }
+        b.map = map;
+        b.map.put(new Pair(x, y), b);
+        return b;
     }
 }

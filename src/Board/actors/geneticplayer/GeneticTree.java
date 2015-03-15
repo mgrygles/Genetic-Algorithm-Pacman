@@ -135,7 +135,7 @@ public class GeneticTree {
         }
 
         public BoardNode eval(GeneticAlgorithmPlayer player) {
-            System.out.println("Called " + this.n);
+            //System.out.println("Called " + this.n);
             return this.m.move(player);
         }
 

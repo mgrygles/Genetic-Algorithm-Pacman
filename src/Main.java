@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        int count = 10;
+        int count = 10000;
         List<Board> boards = new ArrayList<Board>(count);
         List<GeneticAlgorithmPlayer> genetics = new ArrayList<GeneticAlgorithmPlayer>(count);
         BlockingQueue<Runnable> games = new LinkedBlockingQueue<Runnable>(count);
@@ -31,14 +31,11 @@ public class Main {
                 a.spawn(b.getGhostSpawn());
             }
             GeneticAlgorithmPlayer gp = new GeneticAlgorithmPlayer(b);
-            //DumbPlayer gp = new DumbPlayer(b);
             gp.spawn(b.getPlayerSpawn());
             b.registerActor(gp);
             genetics.add(gp);
             boards.add(b);
             exec.execute(() -> b.play());
-            //b.play();
-            //System.out.printf("Score: %d\n", gp.getScore());
         }
         exec.shutdown();
         while (!exec.isShutdown()) {}

@@ -2,6 +2,7 @@ package board;
 
 import board.actors.Actor;
 import board.actors.Player;
+import board.actors.geneticplayer.GeneticAlgorithmPlayer;
 import board.tiles.BoardNode;
 import board.tiles.GhostSpawnNode;
 import board.tiles.PlayerSpawnNode;
@@ -65,6 +66,12 @@ public class Board {
             this.boardTick();
             ++count;
         }
+        for(Actor a : this.actors) {
+            if(a instanceof GeneticAlgorithmPlayer) {
+                System.out.println(a.getScore());
+                break;
+            }
+        }
         return count;
     }
 
@@ -110,6 +117,7 @@ public class Board {
     }
 
     protected ArrayList<ArrayList<BoardNode>> readBoard(File text) throws FileNotFoundException {
+        HashMap<Pair, BoardNode> map = new HashMap<>();
         ArrayList<ArrayList<BoardNode>> board = new ArrayList<ArrayList<BoardNode>>();
         Scanner br = new Scanner(new FileReader(text));
         int x = 0;
@@ -118,7 +126,7 @@ public class Board {
             int y = 0;
             ArrayList<BoardNode> row = new ArrayList<BoardNode>();
             for (Character c : l.toCharArray()) {
-                BoardNode n = BoardNodeFactory.makeBoardNode(c, x, y++);
+                BoardNode n = BoardNodeFactory.makeBoardNode(map, c, x, y++);
                 if (n instanceof GhostSpawnNode) {
                     this.ghostSpawn = n;
                 }
