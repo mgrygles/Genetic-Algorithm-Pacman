@@ -33,16 +33,16 @@ public class GeneticTree {
         predicate_strings.add("Nearest Ghost");
         predicate_strings.add("Nearest Energizer");
         predicate_strings.add("Has Energizer");
-        predicate_strings.add("In Danger");
-        predicate_strings.add("Invulnerable");
+        predicate_strings.add("Is In Danger");
+        predicate_strings.add("Is Invulnerable");
         predicate_strings.add("Nearest Energizer is safe");
 
-        terminals.add((p) -> (p.rand_move()));
+        //terminals.add((p) -> (p.rand_move()));
         terminals.add((p) -> (p.safestMove()));
         terminals.add((p) -> (p.attackMove()));
         terminals.add((p) -> (p.chain_move()));
         terminals.add((p) -> (p.energizer_move()));
-        terminal_strings.add("Rand");
+        //terminal_strings.add("Rand");
         terminal_strings.add("Safest");
         terminal_strings.add("Attack");
         terminal_strings.add("Chain");
@@ -55,13 +55,13 @@ public class GeneticTree {
     private MoveTree buildMoveTree() {
         if(this.predicates.isEmpty()) {
             int index = Board.rng.nextInt(terminals.size());
-            return new pred_term(terminals.get(index), terminal_strings.get(index));
+            return new MoveTreeLeaf(terminals.get(index), terminal_strings.get(index));
         }
         else {
             int index = Board.rng.nextInt(predicates.size());
             Predicate<GeneticAlgorithmPlayer> p = this.predicates.remove(index);
             String s = predicate_strings.remove(index);
-            return new pred(p, buildMoveTree(), buildMoveTree(), s);
+            return new MoveTreePredicate(p, buildMoveTree(), buildMoveTree(), s);
         }
     }
 
@@ -71,17 +71,47 @@ public class GeneticTree {
 
     public GeneticTree(GeneticTree a, GeneticTree b) {
         Random rng = Board.rng;
+        Queue<MoveTreePredicate> q = new LinkedList<MoveTreePredicate>();
+    }
+
+    private MoveTree merge(MoveTree a, MoveTree b) {
+        MoveTree n;
+        if(Board.rng.nextBoolean()) {
+            n = copy(a);
+        }
+        else {
+            n = copy(b);
+        }
+        if(n instanceof MoveTreePredicate) {
+            MoveTreePredicate p = (MoveTreePredicate) n;
+            MoveTreePredicate p1 = (MoveTreePredicate) a;
+            MoveTreePredicate p2 = (MoveTreePredicate) b;
+            p.l = merge(p1.l, p2.l);
+            p.r = merge(p1.r, p2.r);
+        }
+        return n;
+    }
+
+    private MoveTree copy(MoveTree a) {
+        if(a instanceof MoveTreePredicate) {
+            MoveTreePredicate a2 = (MoveTreePredicate)a;
+            return new MoveTreePredicate(a2.t, copy(a2.l), copy(a2.r), a2.n);
+        }
+        else { //Terminal
+            MoveTreeLeaf a2 = (MoveTreeLeaf) a;
+            return new MoveTreeLeaf(a2.m, a2.n);
+        }
     }
 
     interface MoveTree {
         BoardNode eval(GeneticAlgorithmPlayer player);
     }
 
-    private class pred implements MoveTree {
+    private class MoveTreePredicate implements MoveTree {
         Predicate<GeneticAlgorithmPlayer> t;
-        private String n;
+        String n;
         MoveTree l, r;
-        public pred(Predicate<GeneticAlgorithmPlayer> t, MoveTree l, MoveTree r, String n) {
+        public MoveTreePredicate(Predicate<GeneticAlgorithmPlayer> t, MoveTree l, MoveTree r, String n) {
             this.t = t;
             this.n = n;
             this.l = l;
@@ -98,10 +128,10 @@ public class GeneticTree {
         }
     }
 
-    private class pred_term implements MoveTree {
+    private class MoveTreeLeaf implements MoveTree {
         MoveLambda m;
         String n;
-        public pred_term(MoveLambda m, String n) {
+        public MoveTreeLeaf(MoveLambda m, String n) {
             this.m = m;
             this.n = n;
         }

@@ -84,9 +84,6 @@ public class GeneticAlgorithmPlayer extends Player {
 
     public BoardNode chain_move() {
         List<BoardNode> choices = this.getLocation().getNeighbors(this);
-        if (choices.size() > 1 && choices.contains(this.last) && this.last != null) {
-            choices.remove(this.last); // Don't go backwards
-        }
         this.last = this.getLocation();
         BoardNode choice = choices.get(0);
         for(BoardNode b : choices) {
