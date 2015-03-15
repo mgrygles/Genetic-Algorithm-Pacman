@@ -1,6 +1,7 @@
 package board;
 
 import board.actors.Actor;
+import board.actors.Ghost;
 import board.actors.Player;
 import board.actors.geneticplayer.GeneticAlgorithmPlayer;
 import board.tiles.BoardNode;
@@ -16,7 +17,7 @@ import java.util.*;
  * Created by ahanes on 2/15/15.
  */
 public class Board {
-    public static final Random rng = new Random(5);
+    public static final Random rng = new Random(50);
     private BoardSpawner spawnQueue;
     private BoardNode[][] board;
     private BoardNode ghostSpawn;
@@ -26,6 +27,18 @@ public class Board {
 
     private HashMap<Actor, BoardNode> locations;
     private boolean over = false;
+
+    public static Board simpleBoard() throws Exception {
+        Board b = new Board(new File("board.txt"));
+        List<Actor> actors = new ArrayList<Actor>();
+        for (int i2 = 0; i2 < 6; ++i2) {
+            Actor a = new Ghost(b);
+            actors.add(a);
+            b.registerActor(a);
+            a.spawn(b.getGhostSpawn());
+        }
+        return b;
+    }
 
     public Board(File text) throws FileNotFoundException {
         this.locations = new HashMap<Actor, BoardNode>();
@@ -65,12 +78,6 @@ public class Board {
         while (!this.isOver()) {
             this.boardTick();
             ++count;
-        }
-        for(Actor a : this.actors) {
-            if(a instanceof GeneticAlgorithmPlayer) {
-                System.out.println(a.getScore());
-                break;
-            }
         }
         return count;
     }
@@ -178,6 +185,14 @@ public class Board {
         return str.toString();
     }
 
+    public Actor getPlayer() {
+        for(Actor a : this.actors) {
+            if(a instanceof Player) {
+                return a;
+            }
+        }
+        return null;
+    }
     public BoardNode getPlayerSpawn() {
         return playerSpawn;
     }

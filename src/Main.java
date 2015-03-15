@@ -1,43 +1,59 @@
 import board.Board;
-import board.actors.Actor;
-import board.actors.DumbPlayer;
-import board.actors.Ghost;
 import board.actors.Player;
 import board.actors.geneticplayer.GeneticAlgorithmPlayer;
+import board.actors.geneticplayer.GeneticTree;
 import ui.PacmanUI;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
-        int count = 10000;
-        List<Board> boards = new ArrayList<Board>(count);
-        List<GeneticAlgorithmPlayer> genetics = new ArrayList<GeneticAlgorithmPlayer>(count);
-        BlockingQueue<Runnable> games = new LinkedBlockingQueue<Runnable>(count);
-        ExecutorService exec = new ThreadPoolExecutor(4, 8, 10, TimeUnit.MINUTES, games);
-        for (int i = 0; i < count; ++i) {
-            Board b = new Board(new File("board.txt"));
-            List<Actor> actors = new ArrayList<Actor>();
-            for (int i2 = 0; i2 < 6; ++i2) {
-                Actor a = new Ghost(b);
-                actors.add(a);
-                b.registerActor(a);
-                a.spawn(b.getGhostSpawn());
-            }
-            GeneticAlgorithmPlayer gp = new GeneticAlgorithmPlayer(b);
-            gp.spawn(b.getPlayerSpawn());
-            b.registerActor(gp);
-            genetics.add(gp);
-            boards.add(b);
-            exec.execute(() -> b.play());
+    public static List<GeneticTree> firstPop(int count) {
+        List<GeneticTree> l = new ArrayList<>(count);
+        for(int i = 0; i < count; ++i) {
+            l.add(new GeneticTree());
         }
-        exec.shutdown();
-        while (!exec.isShutdown()) {}
+        return l;
+    }
+
+    public static void drawGame(GeneticTree gTree) throws Exception {
+        Board board = Board.simpleBoard();
+        Player p = new GeneticAlgorithmPlayer(board,gTree);
+        board.registerActor(p);
+        p.spawn(board.getPlayerSpawn());
+        PacmanUI u = new PacmanUI(board);
+        while (!board.isOver()) {
+            board.boardTick();
+            u.redrawGrid(board);
+            Thread.sleep(200);
+        }
+        System.out.println("Game Over");
+        System.out.printf("Score: %d\n", p.getScore());
+    }
+
+    public static List<GeneticTree> run(List<GeneticTree> trees) throws Exception {
+        ArrayList<Board> plays = new ArrayList<>(trees.size());
+        for(GeneticTree g : trees) {
+            Board b = Board.simpleBoard();
+            GeneticAlgorithmPlayer ga = new GeneticAlgorithmPlayer(b, g);
+            ga.spawn(b.getPlayerSpawn());
+            b.registerActor(ga);
+            plays.add(b);
+            b.play();
+        }
+        plays.sort((x, y) -> y.getPlayer().getScore() - x.getPlayer().getScore());
+        ArrayList<GeneticTree> ts = new ArrayList<GeneticTree>(trees.size());
+        for(Board b : plays) {
+            GeneticAlgorithmPlayer gpp = (GeneticAlgorithmPlayer)b.getPlayer();
+            ts.add(gpp.getDecisionTree());
+        }
+        return ts;
+    }
+
+    public static void main(String[] args) throws Exception {
+        int count = 1000;
+        List<GeneticTree> l = firstPop(count);
+        l = run(l);
+        drawGame(l.get(0));
     }
 }

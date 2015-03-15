@@ -38,7 +38,7 @@ public abstract class Player extends Actor {
         if (this.invulnerable()) {
             other.die();
             this.incrScore(100);
-        } else {
+        } else if(other.isActive()) {
             board.gameOver();
         }
     }

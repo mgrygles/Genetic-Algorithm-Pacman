@@ -15,18 +15,8 @@ import java.util.List;
  */
 public class GraphicalMain {
     public static void main(String[] args) throws Exception {
-        Board board = new Board(new File("board.txt"));
-        List<Actor> actors = new ArrayList<Actor>();
-        for (int i = 0; i < 6; ++i) {
-            Actor a = new Ghost(board);
-            actors.add(new Ghost(board));
-            board.registerActor(a);
-            a.spawn(board.getGhostSpawn());
-        }
-        GeneticAlgorithmPlayer p1 = new GeneticAlgorithmPlayer(board);
-        GeneticAlgorithmPlayer p2 = new GeneticAlgorithmPlayer(board);
-        Player p = new GeneticAlgorithmPlayer(p1, p2);
-        actors.add(p);
+        Board board = Board.simpleBoard();
+        Player p = new GeneticAlgorithmPlayer(board);
         board.registerActor(p);
         p.spawn(board.getPlayerSpawn());
         PacmanUI u = new PacmanUI(board);

@@ -16,20 +16,34 @@ import java.util.List;
 public class GeneticAlgorithmPlayer extends Player {
     public BoardNode last;
     public int border;
-    private GeneticTree gTree;
+
+    public GeneticTree getDecisionTree() {
+        return decisionTree;
+    }
+
+    public void setDecisionTree(GeneticTree decisionTree) {
+        this.decisionTree = decisionTree;
+    }
+
+    private GeneticTree decisionTree;
 
 
     public GeneticAlgorithmPlayer(Board board) {
         super(board);
         this.border = Board.rng.nextInt(50);
-        gTree = new GeneticTree();
-
+        decisionTree = new GeneticTree();
     }
 
-    public GeneticAlgorithmPlayer(GeneticAlgorithmPlayer a, GeneticAlgorithmPlayer b) {
-        super(a.board);
+    public GeneticAlgorithmPlayer(Board board, GeneticTree t) {
+        super(board);
         this.border = Board.rng.nextInt(50);
-        gTree = new GeneticTree(a.gTree, b.gTree);
+        decisionTree = t;
+    }
+
+    public GeneticAlgorithmPlayer(Board brd, GeneticAlgorithmPlayer a, GeneticAlgorithmPlayer b) {
+        super(brd);
+        this.border = Board.rng.nextInt(50);
+        decisionTree = new GeneticTree(a.decisionTree, b.decisionTree);
     }
 
     public BoardNode rand_move() {
@@ -104,7 +118,7 @@ public class GeneticAlgorithmPlayer extends Player {
 
     @Override
     public BoardNode move() {
-        return this.gTree.move(this);
+        return this.decisionTree.move(this);
     }
 
     @Override
