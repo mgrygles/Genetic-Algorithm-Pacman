@@ -75,7 +75,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         int count = 200;
         List<GeneticTree> l = firstPop(count);
-        for (int i = 0; i < 50; ++i) {
+        for (int i = 0; i < 5; ++i) {
             System.out.println("Generation " + i);
             if (i != 0)
                 mate(l);
