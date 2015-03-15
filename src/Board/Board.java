@@ -61,7 +61,7 @@ public class Board {
 
     public long play() {
         long count = 0;
-        while (this.isOver()) {
+        while (!this.isOver()) {
             this.boardTick();
             ++count;
         }
