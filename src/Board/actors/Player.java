@@ -37,7 +37,7 @@ public abstract class Player extends Actor {
     public void collision(Actor other) {
         if (this.invulnerable()) {
             other.die();
-            this.incrScore(100);
+            this.incrScore(200);
         } else if (other.isActive()) {
             board.gameOver();
         }

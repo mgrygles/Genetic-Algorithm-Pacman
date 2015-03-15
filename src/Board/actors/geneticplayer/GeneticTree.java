@@ -3,9 +3,7 @@ package board.actors.geneticplayer;
 import board.Board;
 import board.tiles.BoardNode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -13,60 +11,75 @@ import java.util.function.Predicate;
  */
 public class GeneticTree {
     private List<Predicate<GeneticAlgorithmPlayer>> predicates = new ArrayList<Predicate<GeneticAlgorithmPlayer>>();
-    private List<MoveLambda> terminals = new ArrayList<MoveLambda>();
-    private List<Predicate<GeneticAlgorithmPlayer>> predicates_used = new ArrayList<Predicate<GeneticAlgorithmPlayer>>();
-    private List<MoveLambda> terminals_used = new ArrayList<MoveLambda>();
-    private List<String> predicate_strings = new ArrayList<String>();
-    private List<String> terminal_strings = new ArrayList<String>();
+    private List<MoveLambda> terminals = new LinkedList<MoveLambda>();
+    private HashMap<Predicate<GeneticAlgorithmPlayer>, String> predicateToStr = new HashMap<>();
+    private HashMap<MoveLambda, String> actionToStr = new HashMap<>();
     private MoveTree mTree;
+    public int score = 0;
+    private int border = Board.rng.nextInt();
 
     public GeneticTree() {
         HashSet<Object> used = new HashSet<Object>();
-        predicates.add((p) -> (p.nearestGhost(p.getLocation()) > p.border));
-        predicates.add((p) -> (p.nearestEnergizer(p.getLocation()) > p.border));
+        predicates.add((p) -> (p.nearestGhost(p.getLocation()) > border));
+        predicates.add((p) -> (p.nearestEnergizer(p.getLocation()) > border));
         predicates.add((p) -> (p.hasEnergizer(p.getLocation())));
         predicates.add((p) -> (p.inDanger()));
         predicates.add((p) -> (p.invulnerable()));
-        predicates.add((p) -> (p.nearestEnergizerIsSafe(p.getLocation(), p.border)));
-        predicate_strings.add("Nearest Ghost");
-        predicate_strings.add("Nearest Energizer");
-        predicate_strings.add("Has Energizer");
-        predicate_strings.add("Is In Danger");
-        predicate_strings.add("Is Invulnerable");
-        predicate_strings.add("Nearest Energizer is safe");
+        predicates.add((p) -> (p.nearestEnergizerIsSafe(p.getLocation(), border)));
+        predicateToStr.put(predicates.get(0), "Nearest Ghost");
+        predicateToStr.put(predicates.get(1), "Nearest Energizer");
+        predicateToStr.put(predicates.get(2), "Has Energizer");
+        predicateToStr.put(predicates.get(3), "In Danger");
+        predicateToStr.put(predicates.get(4), "Invulnerable");
+        predicateToStr.put(predicates.get(5), "Nearest Energizer Safe");
+        List<Predicate<GeneticAlgorithmPlayer>> not_predicates = new ArrayList<Predicate<GeneticAlgorithmPlayer>>();
+        for(Predicate<GeneticAlgorithmPlayer> p : predicates) {
+            Predicate<GeneticAlgorithmPlayer> p2 = p.negate();
+            not_predicates.add(p2);
+            predicateToStr.put(p2, "Not " + predicateToStr.get(p));
+        }
+        predicates.addAll(not_predicates);
 
-        //terminals.add((p) -> (p.rand_move()));
+        terminals.add((p) -> (p.rand_move()));
         terminals.add((p) -> (p.safestMove()));
         terminals.add((p) -> (p.attackMove()));
         terminals.add((p) -> (p.chain_move()));
         terminals.add((p) -> (p.energizer_move()));
-        //terminal_strings.add("Rand");
-        terminal_strings.add("Safest");
-        terminal_strings.add("Attack");
-        terminal_strings.add("Chain");
-        terminal_strings.add("Energizer");
-        int rand = Board.rng.nextInt(terminals.size());
+        actionToStr.put(terminals.get(0), "rand");
+        actionToStr.put(terminals.get(1), "safest");
+        actionToStr.put(terminals.get(2), "attack");
+        actionToStr.put(terminals.get(3), "chain");
+        actionToStr.put(terminals.get(4), "energizer");
+        Collections.shuffle(terminals, Board.rng);
         this.mTree = this.buildMoveTree();
     }
 
     public GeneticTree(GeneticTree a, GeneticTree b) {
+        this.border = (Board.rng.nextBoolean() ?  a.border : b.border);
         this.mTree = merge(a.mTree, b.mTree);
     }
 
     private MoveTree buildMoveTree() {
         if (this.predicates.isEmpty()) {
             int index = Board.rng.nextInt(terminals.size());
-            return new MoveTreeLeaf(terminals.get(index), terminal_strings.get(index));
+            return new MoveTreeLeaf(terminals.get(index), this.actionToStr.get(terminals.get(index)));
         } else {
             int index = Board.rng.nextInt(predicates.size());
             Predicate<GeneticAlgorithmPlayer> p = this.predicates.remove(index);
-            String s = predicate_strings.remove(index);
+            String s = this.predicateToStr.get(p);
             return new MoveTreePredicate(p, buildMoveTree(), buildMoveTree(), s);
         }
     }
 
     public BoardNode move(GeneticAlgorithmPlayer p) {
         return this.mTree.eval(p);
+    }
+
+    public void mutate() {
+        if(Board.rng.nextFloat() > .9) {
+            GeneticTree g = new GeneticTree(this, new GeneticTree());
+            this.mTree = g.mTree;
+        }
     }
 
     private MoveTree merge(MoveTree a, MoveTree b) {
@@ -84,6 +97,10 @@ public class GeneticTree {
             p.r = merge(p1.r, p2.r);
         }
         return n;
+    }
+
+    public String toString() {
+        return this.mTree.toString();
     }
 
     private MoveTree copy(MoveTree a) {

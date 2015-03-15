@@ -5,6 +5,7 @@ import board.actors.geneticplayer.GeneticTree;
 import ui.PacmanUI;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -37,61 +38,69 @@ public class Main {
     }
 
     public static List<GeneticTree> run(List<GeneticTree> trees) throws Exception {
-        AtomicInteger sum = new AtomicInteger(0);
-        ConcurrentHashMap<GeneticTree, Integer> scores = new ConcurrentHashMap<>();
         ExecutorService pool = new ThreadPoolExecutor(4, 12, 15, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
         ArrayList<Board> plays = new ArrayList<>(trees.size());
         for (GeneticTree g : trees) {
-            scores.put(g, 0);
-            for (int i = 0; i < 10; ++i) {
-                Board b = Board.simpleBoard();
-                GeneticAlgorithmPlayer ga = new GeneticAlgorithmPlayer(b, g);
-                ga.spawn(b.getPlayerSpawn());
-                b.registerActor(ga);
-                plays.add(b);
                 pool.execute(() -> {
-                    b.play();
-                    scores.put(g, scores.get(g) + b.getPlayer().getScore());
-                    sum.addAndGet(b.getPlayer().getScore());
+                    g.score = 0;
+                    for (int i = 0; i < 10; ++i) {
+                        Board b = null;
+                        try {
+                            b = Board.simpleBoard();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        GeneticAlgorithmPlayer ga = new GeneticAlgorithmPlayer(b, g);
+                        ga.spawn(b.getPlayerSpawn());
+                        b.registerActor(ga);
+                        plays.add(b);
+                        b.play();
+                        g.score += b.getPlayer().getScore();
+                    }
                 });
-            }
         }
         pool.shutdown();
-        while (!pool.isTerminated()) {
-        }
-        LinkedList<GeneticTree> ts = new LinkedList<>(trees);
-        ts.sort((x, y) -> scores.get(y).compareTo(scores.get(x)));
-        System.out.println("Average = " + sum.floatValue() / (trees.size() * 10));
+        while (!pool.isTerminated()) {}
+        int avg = 0;
         int max = 0;
-        for(Integer x : scores.values()) {
-            if(max < x) {
-                max = x;
+        for(GeneticTree x : trees) {
+            if(max < x.score) {
+                max = x.score;
             }
+            avg += x.score;
         }
+        System.out.println("Average = " + avg/trees.size());
         System.out.println("Max = " + max);
-        return ts;
+        return trees;
     }
 
     public static List<GeneticTree> mate(List<GeneticTree> stuff) {
-        List<GeneticTree> elite = new ArrayList<GeneticTree>(stuff.size());
-        for (int i = 0; i < stuff.size() / 2; ++i) {
-            int rand = Board.rng.nextInt(i + 10);
-            int rand2 = Board.rng.nextInt(i + 25);
-            elite.add(new GeneticTree(stuff.get(i), stuff.get(rand)));
-            elite.add(new GeneticTree(stuff.get(i), stuff.get(rand2)));
+        List<GeneticTree> n = new LinkedList<GeneticTree>(stuff.subList(0, stuff.size()/5));
+        List<GeneticTree> babies = new LinkedList<GeneticTree>(n);
+        Collections.shuffle(stuff);
+        while(babies.size() != stuff.size()) {
+            int a = Board.rng.nextInt(n.size());
+            int b = Board.rng.nextInt(n.size());
+            babies.add(new GeneticTree(n.get(a), n.get(b)));
+            babies.get(babies.size() - 1).mutate();
         }
-        return elite;
+        return babies;
     }
 
     public static void main(String[] args) throws Exception {
-        int count = 50;
+        int count = 20;
+        int gens = 10;
         List<GeneticTree> l = firstPop(count);
-        for (int i = 0; i < 5; ++i) {
+        System.out.printf("Running with %d pacmen at %d generations\n", count, gens);
+        for (int i = 0; i < gens; ++i) {
             System.out.println("Generation " + i);
-            if (i != 0)
+            if (i != 0) {
                 mate(l);
+            }
             l = run(l);
+            Collections.sort(l, (x, y) -> y.score - x.score);
         }
+        System.out.println(l.get(0).toString());
         drawGame(l.get(0));
     }
 }
