@@ -15,7 +15,7 @@ import java.util.*;
  * Created by ahanes on 2/15/15.
  */
 public class Board {
-    public static final Random rng = new Random();
+    public static final Random rng = new Random(5);
     private BoardSpawner spawnQueue;
     private BoardNode[][] board;
     private BoardNode ghostSpawn;

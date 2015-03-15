@@ -26,6 +26,12 @@ public class GeneticAlgorithmPlayer extends Player {
 
     }
 
+    public GeneticAlgorithmPlayer(GeneticAlgorithmPlayer a, GeneticAlgorithmPlayer b) {
+        super(a.board);
+        this.border = Board.rng.nextInt(50);
+        gTree = new GeneticTree(a.gTree, b.gTree);
+    }
+
     public BoardNode rand_move() {
         List<BoardNode> choices = this.getLocation().getNeighbors(this);
         if (choices.size() > 1 && choices.contains(this.last) && this.last != null) {

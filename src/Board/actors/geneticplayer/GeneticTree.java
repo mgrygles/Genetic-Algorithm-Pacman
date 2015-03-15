@@ -70,8 +70,7 @@ public class GeneticTree {
     }
 
     public GeneticTree(GeneticTree a, GeneticTree b) {
-        Random rng = Board.rng;
-        Queue<MoveTreePredicate> q = new LinkedList<MoveTreePredicate>();
+        this.mTree = merge(a.mTree, b.mTree);
     }
 
     private MoveTree merge(MoveTree a, MoveTree b) {

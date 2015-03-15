@@ -23,7 +23,9 @@ public class GraphicalMain {
             board.registerActor(a);
             a.spawn(board.getGhostSpawn());
         }
-        Player p = new GeneticAlgorithmPlayer(board);
+        GeneticAlgorithmPlayer p1 = new GeneticAlgorithmPlayer(board);
+        GeneticAlgorithmPlayer p2 = new GeneticAlgorithmPlayer(board);
+        Player p = new GeneticAlgorithmPlayer(p1, p2);
         p.addInvuln(5);
         actors.add(p);
         board.registerActor(p);
