@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_pacman" default="compile.module.pacman">
+  <dirname property="module.pacman.basedir" file="${ant.file.module_pacman}"/>
+  
+  <property name="module.jdk.home.pacman" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.pacman" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.pacman" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.pacman" value="-encoding UTF-8 -source 8 ${compiler.args}"/>
+  
+  <property name="pacman.output.dir" value="${module.pacman.basedir}/out/production/Pacman"/>
+  <property name="pacman.testoutput.dir" value="${module.pacman.basedir}/out/test/Pacman"/>
+  
+  <path id="pacman.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="pacman.module.production.classpath">
+    <path refid="${module.jdk.classpath.pacman}"/>
+  </path>
+  
+  <path id="pacman.runtime.production.module.classpath">
+    <pathelement location="${pacman.output.dir}"/>
+  </path>
+  
+  <path id="pacman.module.classpath">
+    <path refid="${module.jdk.classpath.pacman}"/>
+    <pathelement location="${pacman.output.dir}"/>
+  </path>
+  
+  <path id="pacman.runtime.module.classpath">
+    <pathelement location="${pacman.testoutput.dir}"/>
+    <pathelement location="${pacman.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.pacman">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.pacman">
+    <patternset refid="excluded.from.module.pacman"/>
+  </patternset>
+  
+  <path id="pacman.module.sourcepath">
+    <dirset dir="${module.pacman.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.pacman" depends="compile.module.pacman.production,compile.module.pacman.tests" description="Compile module Pacman"/>
+  
+  <target name="compile.module.pacman.production" depends="register.custom.compilers" description="Compile module Pacman; production classes">
+    <mkdir dir="${pacman.output.dir}"/>
+    <javac2 destdir="${pacman.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.pacman}/javac">
+      <compilerarg line="${compiler.args.pacman}"/>
+      <bootclasspath refid="pacman.module.bootclasspath"/>
+      <classpath refid="pacman.module.production.classpath"/>
+      <src refid="pacman.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.pacman"/>
+    </javac2>
+    
+    <copy todir="${pacman.output.dir}">
+      <fileset dir="${module.pacman.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.pacman.tests" depends="register.custom.compilers,compile.module.pacman.production" description="compile module Pacman; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.pacman" description="cleanup module">
+    <delete dir="${pacman.output.dir}"/>
+    <delete dir="${pacman.testoutput.dir}"/>
+  </target>
+</project>
