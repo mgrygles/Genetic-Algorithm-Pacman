@@ -8,6 +8,9 @@ import board.actors.geneticplayer.GeneticAlgorithmPlayer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -20,15 +23,30 @@ public class Main {
             board.registerActor(a);
             a.spawn(board.getGhostSpawn());
         }
-        Player p = new GeneticAlgorithmPlayer(board);
-        p.addInvuln(5);
-        actors.add(p);
-        board.registerActor(p);
-        p.spawn(board.getPlayerSpawn());
-        while (!board.isOver()) {
-            board.boardTick();
+        int count = 10;
+        List<Board> boards = new ArrayList<Board>(count);
+        List<GeneticAlgorithmPlayer> genetics = new ArrayList<GeneticAlgorithmPlayer>(count);
+        BlockingQueue<Runnable> games = new LinkedBlockingQueue<Runnable>(count);
+        ExecutorService exec = new ThreadPoolExecutor(4, 8, 5, TimeUnit.MINUTES, games);
+        int best = 0;
+        GeneticAlgorithmPlayer bestp;
+        for(int i = 0; i < count; ++i) {
+            GeneticAlgorithmPlayer gp = new GeneticAlgorithmPlayer(board);
+            Board b = new Board(new File("board.txt"));
+            gp.spawn(b.getPlayerSpawn());
+            b.registerActor(gp);
+            genetics.add(gp);
+            boards.add(b);
+            exec.execute(() -> b.play());
         }
-        System.out.println("Game Over");
-        System.out.printf("Score: %d\n", p.getScore());
+        exec.shutdown();
+        while(!exec.isShutdown()) {}
+        for(int i = 0; i < 10; ++i) {
+            for(Actor a : board.getActors()) {
+                if (a instanceof GeneticAlgorithmPlayer) {
+                    System.out.println(a.getScore());
+                }
+            }
+        }
     }
 }

@@ -49,7 +49,6 @@ public class GeneticTree {
         terminal_strings.add("Energizer");
         int rand = Board.rng.nextInt(terminals.size());
         this.mTree = this.buildMoveTree();
-        System.out.println(this.mTree);
     }
 
     private MoveTree buildMoveTree() {

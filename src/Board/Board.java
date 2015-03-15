@@ -59,6 +59,15 @@ public class Board {
         return rows;
     }
 
+    public long play() {
+        long count = 0;
+        while (this.isOver()) {
+            this.boardTick();
+            ++count;
+        }
+        return count;
+    }
+
     public void boardTick() {
         List<Actor> spawns = spawnQueue.tick();
         for (Actor a : spawns) {
