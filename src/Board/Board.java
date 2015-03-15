@@ -3,7 +3,6 @@ package board;
 import board.actors.Actor;
 import board.actors.Ghost;
 import board.actors.Player;
-import board.actors.geneticplayer.GeneticAlgorithmPlayer;
 import board.tiles.BoardNode;
 import board.tiles.GhostSpawnNode;
 import board.tiles.PlayerSpawnNode;

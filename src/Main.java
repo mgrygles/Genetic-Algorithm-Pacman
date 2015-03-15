@@ -50,10 +50,22 @@ public class Main {
         return ts;
     }
 
+    public static List<GeneticTree> mate(List<GeneticTree> stuff) {
+        List<GeneticTree> elite = new ArrayList<GeneticTree>(stuff.size());
+        for(int i = 0; i < stuff.size(); ++i) {
+            int rand = Board.rng.nextInt(stuff.size()-i) + i;
+            elite.add(new GeneticTree(stuff.get(i), stuff.get(rand)));
+        }
+        return elite;
+    }
+
     public static void main(String[] args) throws Exception {
-        int count = 1000;
+        int count = 100;
         List<GeneticTree> l = firstPop(count);
-        l = run(l);
+        for(int i = 0; i < 5; ++i) {
+            l = run(l);
+            mate(l);
+        }
         drawGame(l.get(0));
     }
 }
