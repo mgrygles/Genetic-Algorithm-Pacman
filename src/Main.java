@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
 
@@ -36,6 +37,7 @@ public class Main {
     }
 
     public static List<GeneticTree> run(List<GeneticTree> trees) throws Exception {
+        AtomicInteger sum = new AtomicInteger(0);
         ConcurrentHashMap<GeneticTree, Integer> scores = new ConcurrentHashMap<>();
         ExecutorService pool = new ThreadPoolExecutor(4, 12, 15, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
         ArrayList<Board> plays = new ArrayList<>(trees.size());
@@ -50,6 +52,7 @@ public class Main {
                 pool.execute(() -> {
                     b.play();
                     scores.put(g, scores.get(g) + b.getPlayer().getScore());
+                    sum.addAndGet(b.getPlayer().getScore());
                 });
             }
         }
@@ -58,6 +61,14 @@ public class Main {
         }
         LinkedList<GeneticTree> ts = new LinkedList<>(trees);
         ts.sort((x, y) -> scores.get(y).compareTo(scores.get(x)));
+        System.out.println("Average = " + sum.floatValue() / (trees.size() * 10));
+        int max = 0;
+        for(Integer x : scores.values()) {
+            if(max < x) {
+                max = x;
+            }
+        }
+        System.out.println("Max = " + max);
         return ts;
     }
 
@@ -73,7 +84,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        int count = 200;
+        int count = 50;
         List<GeneticTree> l = firstPop(count);
         for (int i = 0; i < 5; ++i) {
             System.out.println("Generation " + i);
