@@ -3,7 +3,9 @@ package board.actors.geneticplayer;
 import board.Board;
 import board.tiles.BoardNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -17,10 +19,6 @@ public class GeneticTree {
     private List<String> predicate_strings = new ArrayList<String>();
     private List<String> terminal_strings = new ArrayList<String>();
     private MoveTree mTree;
-
-    interface MoveLambda {
-        BoardNode move(GeneticAlgorithmPlayer p);
-    }
 
     public GeneticTree() {
         HashSet<Object> used = new HashSet<Object>();
@@ -51,12 +49,15 @@ public class GeneticTree {
         this.mTree = this.buildMoveTree();
     }
 
+    public GeneticTree(GeneticTree a, GeneticTree b) {
+        this.mTree = merge(a.mTree, b.mTree);
+    }
+
     private MoveTree buildMoveTree() {
-        if(this.predicates.isEmpty()) {
+        if (this.predicates.isEmpty()) {
             int index = Board.rng.nextInt(terminals.size());
             return new MoveTreeLeaf(terminals.get(index), terminal_strings.get(index));
-        }
-        else {
+        } else {
             int index = Board.rng.nextInt(predicates.size());
             Predicate<GeneticAlgorithmPlayer> p = this.predicates.remove(index);
             String s = predicate_strings.remove(index);
@@ -68,19 +69,14 @@ public class GeneticTree {
         return this.mTree.eval(p);
     }
 
-    public GeneticTree(GeneticTree a, GeneticTree b) {
-        this.mTree = merge(a.mTree, b.mTree);
-    }
-
     private MoveTree merge(MoveTree a, MoveTree b) {
         MoveTree n;
-        if(Board.rng.nextBoolean()) {
+        if (Board.rng.nextBoolean()) {
             n = copy(a);
-        }
-        else {
+        } else {
             n = copy(b);
         }
-        if(n instanceof MoveTreePredicate) {
+        if (n instanceof MoveTreePredicate) {
             MoveTreePredicate p = (MoveTreePredicate) n;
             MoveTreePredicate p1 = (MoveTreePredicate) a;
             MoveTreePredicate p2 = (MoveTreePredicate) b;
@@ -91,14 +87,17 @@ public class GeneticTree {
     }
 
     private MoveTree copy(MoveTree a) {
-        if(a instanceof MoveTreePredicate) {
-            MoveTreePredicate a2 = (MoveTreePredicate)a;
+        if (a instanceof MoveTreePredicate) {
+            MoveTreePredicate a2 = (MoveTreePredicate) a;
             return new MoveTreePredicate(a2.t, copy(a2.l), copy(a2.r), a2.n);
-        }
-        else { //Terminal
+        } else { //Terminal
             MoveTreeLeaf a2 = (MoveTreeLeaf) a;
             return new MoveTreeLeaf(a2.m, a2.n);
         }
+    }
+
+    interface MoveLambda {
+        BoardNode move(GeneticAlgorithmPlayer p);
     }
 
     interface MoveTree {
@@ -109,6 +108,7 @@ public class GeneticTree {
         Predicate<GeneticAlgorithmPlayer> t;
         String n;
         MoveTree l, r;
+
         public MoveTreePredicate(Predicate<GeneticAlgorithmPlayer> t, MoveTree l, MoveTree r, String n) {
             this.t = t;
             this.n = n;
@@ -129,13 +129,15 @@ public class GeneticTree {
     private class MoveTreeLeaf implements MoveTree {
         MoveLambda m;
         String n;
+
         public MoveTreeLeaf(MoveLambda m, String n) {
             this.m = m;
             this.n = n;
         }
 
         public BoardNode eval(GeneticAlgorithmPlayer player) {
-            //System.out.println("Called " + this.n);
+            if (Board.Debug)
+                System.out.println("Called " + this.n);
             return this.m.move(player);
         }
 

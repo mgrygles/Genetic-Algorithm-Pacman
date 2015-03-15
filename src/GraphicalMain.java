@@ -1,14 +1,7 @@
 import board.Board;
-import board.actors.Actor;
-import board.actors.DumbPlayer;
-import board.actors.Ghost;
 import board.actors.Player;
 import board.actors.geneticplayer.GeneticAlgorithmPlayer;
 import ui.PacmanUI;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ahanes on 2/21/15.

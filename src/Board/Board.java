@@ -17,6 +17,8 @@ import java.util.*;
  */
 public class Board {
     public static final Random rng = new Random(50);
+    public static final long MAX_TURNS = 1000;
+    public static boolean Debug = false;
     private BoardSpawner spawnQueue;
     private BoardNode[][] board;
     private BoardNode ghostSpawn;
@@ -26,6 +28,15 @@ public class Board {
 
     private HashMap<Actor, BoardNode> locations;
     private boolean over = false;
+
+    public Board(File text) throws FileNotFoundException {
+        this.locations = new HashMap<Actor, BoardNode>();
+        this.actors = new LinkedList<Actor>();
+        this.board = this.boardListToArray(this.readBoard(text));
+        this.rows = board.length;
+        this.cols = board[0].length;
+        this.spawnQueue = new BoardSpawner();
+    }
 
     public static Board simpleBoard() throws Exception {
         Board b = new Board(new File("board.txt"));
@@ -37,15 +48,6 @@ public class Board {
             a.spawn(b.getGhostSpawn());
         }
         return b;
-    }
-
-    public Board(File text) throws FileNotFoundException {
-        this.locations = new HashMap<Actor, BoardNode>();
-        this.actors = new LinkedList<Actor>();
-        this.board = this.boardListToArray(this.readBoard(text));
-        this.rows = board.length;
-        this.cols = board[0].length;
-        this.spawnQueue = new BoardSpawner();
     }
 
     public BoardSpawner getSpawnQueue() {
@@ -74,7 +76,7 @@ public class Board {
 
     public long play() {
         long count = 0;
-        while (!this.isOver()) {
+        while (!this.isOver() && this.MAX_TURNS > count) {
             this.boardTick();
             ++count;
         }
@@ -101,8 +103,8 @@ public class Board {
             }
         }
         for (Actor a : this.actors) {
-            if(a instanceof Player) {
-                ((Player)a).tick();
+            if (a instanceof Player) {
+                ((Player) a).tick();
             }
             for (Actor b : this.actors) {
                 if (a.getLocation() == b.getLocation() && !a.equals(b)) {
@@ -185,13 +187,14 @@ public class Board {
     }
 
     public Actor getPlayer() {
-        for(Actor a : this.actors) {
-            if(a instanceof Player) {
+        for (Actor a : this.actors) {
+            if (a instanceof Player) {
                 return a;
             }
         }
         return null;
     }
+
     public BoardNode getPlayerSpawn() {
         return playerSpawn;
     }

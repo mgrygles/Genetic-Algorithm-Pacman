@@ -17,6 +17,17 @@ public abstract class BoardNode implements BoardDrawable {
 
     public HashMap<Pair, BoardNode> map = new HashMap<Pair, BoardNode>();
     protected Color fgColor;
+    protected Color bgColor;
+    private int x;
+    private int y;
+    private List<Actor> actors;
+    public BoardNode(int x, int y) throws DuplicateCoordinateException {
+        this.x = x;
+        this.y = y;
+        actors = new LinkedList<Actor>();
+        this.fgColor = Color.WHITE;
+        this.bgColor = Color.BLACK;
+    }
 
     public Color getBgColor() {
         return bgColor;
@@ -24,19 +35,6 @@ public abstract class BoardNode implements BoardDrawable {
 
     public void setBgColor(Color bgColor) {
         this.bgColor = bgColor;
-    }
-
-    protected Color bgColor;
-    private int x;
-    private int y;
-    private List<Actor> actors;
-
-    public BoardNode(int x, int y) throws DuplicateCoordinateException {
-        this.x = x;
-        this.y = y;
-        actors = new LinkedList<Actor>();
-        this.fgColor = Color.WHITE;
-        this.bgColor = Color.BLACK;
     }
 
     public int getX() {

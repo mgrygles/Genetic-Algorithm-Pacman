@@ -10,16 +10,7 @@ import java.awt.*;
  */
 public class WalkableNode extends BoardNode {
 
-    public boolean hasWalked() {
-        return hasWalked;
-    }
-
     private boolean hasWalked;
-
-    public boolean hasPowerup() {
-        return hasPowerup;
-    }
-
     private boolean hasPowerup;
 
     public WalkableNode(int x, int y, boolean hasPowerup) {
@@ -32,6 +23,14 @@ public class WalkableNode extends BoardNode {
         super(x, y);
         this.hasWalked = false;
         this.hasPowerup = false;
+    }
+
+    public boolean hasWalked() {
+        return hasWalked;
+    }
+
+    public boolean hasPowerup() {
+        return hasPowerup;
     }
 
     @Override
