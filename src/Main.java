@@ -4,10 +4,7 @@ import board.actors.geneticplayer.GeneticAlgorithmPlayer;
 import board.actors.geneticplayer.GeneticTree;
 import ui.PacmanUI;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -43,7 +40,7 @@ public class Main {
         for (GeneticTree g : trees) {
                 pool.execute(() -> {
                     g.score = 0;
-                    for (int i = 0; i < 10; ++i) {
+                    for (int i = 0; i < 5; ++i) {
                         Board b = null;
                         try {
                             b = Board.simpleBoard();
@@ -54,8 +51,8 @@ public class Main {
                         ga.spawn(b.getPlayerSpawn());
                         b.registerActor(ga);
                         plays.add(b);
-                        b.play();
-                        g.score += b.getPlayer().getScore();
+                        long count = b.play();
+                        g.score += b.getPlayer().getScore()/count;
                     }
                 });
         }
@@ -75,7 +72,7 @@ public class Main {
     }
 
     public static List<GeneticTree> mate(List<GeneticTree> stuff) {
-        List<GeneticTree> n = new LinkedList<GeneticTree>(stuff.subList(0, stuff.size()/5));
+        List<GeneticTree> n = new LinkedList<GeneticTree>(stuff.subList(0, stuff.size()/10));
         List<GeneticTree> babies = new LinkedList<GeneticTree>(n);
         Collections.shuffle(stuff);
         while(babies.size() != stuff.size()) {
@@ -89,7 +86,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         int count = 20;
-        int gens = 10;
+        int gens = 25;
         List<GeneticTree> l = firstPop(count);
         System.out.printf("Running with %d pacmen at %d generations\n", count, gens);
         for (int i = 0; i < gens; ++i) {
@@ -101,6 +98,9 @@ public class Main {
             Collections.sort(l, (x, y) -> y.score - x.score);
         }
         System.out.println(l.get(0).toString());
+        System.out.println("Hit next to play games");
+        new Scanner(System.in).nextLine();
+        for(int i = 0; i < 4; ++i)
         drawGame(l.get(0));
     }
 }

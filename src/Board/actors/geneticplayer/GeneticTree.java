@@ -40,18 +40,18 @@ public class GeneticTree {
         }
         predicates.addAll(not_predicates);
 
-        terminals.add((p) -> (p.rand_move()));
+        //terminals.add((p) -> (p.rand_move()));
         terminals.add((p) -> (p.safestMove()));
         terminals.add((p) -> (p.attackMove()));
         terminals.add((p) -> (p.chain_move()));
         terminals.add((p) -> (p.energizer_move()));
-        actionToStr.put(terminals.get(0), "rand");
-        actionToStr.put(terminals.get(1), "safest");
-        actionToStr.put(terminals.get(2), "attack");
-        actionToStr.put(terminals.get(3), "chain");
-        actionToStr.put(terminals.get(4), "energizer");
+        //actionToStr.put(terminals.get(0), "rand");
+        actionToStr.put(terminals.get(0), "safest");
+        actionToStr.put(terminals.get(1), "attack");
+        actionToStr.put(terminals.get(2), "chain");
+        actionToStr.put(terminals.get(3), "energizer");
         Collections.shuffle(terminals, Board.rng);
-        this.mTree = this.buildMoveTree();
+        this.mTree = this.buildMoveTree(8);
     }
 
     public GeneticTree(GeneticTree a, GeneticTree b) {
@@ -59,15 +59,15 @@ public class GeneticTree {
         this.mTree = merge(a.mTree, b.mTree);
     }
 
-    private MoveTree buildMoveTree() {
-        if (this.predicates.isEmpty()) {
+    private MoveTree buildMoveTree(int size) {
+        if (size == 0) {
             int index = Board.rng.nextInt(terminals.size());
             return new MoveTreeLeaf(terminals.get(index), this.actionToStr.get(terminals.get(index)));
         } else {
             int index = Board.rng.nextInt(predicates.size());
-            Predicate<GeneticAlgorithmPlayer> p = this.predicates.remove(index);
+            Predicate<GeneticAlgorithmPlayer> p = this.predicates.get(index);
             String s = this.predicateToStr.get(p);
-            return new MoveTreePredicate(p, buildMoveTree(), buildMoveTree(), s);
+            return new MoveTreePredicate(p, buildMoveTree(size - 1), buildMoveTree(size - 1), s);
         }
     }
 
@@ -76,7 +76,7 @@ public class GeneticTree {
     }
 
     public void mutate() {
-        if(Board.rng.nextFloat() > .9) {
+        if(Board.rng.nextFloat() > .95) {
             GeneticTree g = new GeneticTree(this, new GeneticTree());
             this.mTree = g.mTree;
         }
@@ -89,15 +89,19 @@ public class GeneticTree {
         } else {
             n = copy(b);
         }
-        if (n instanceof MoveTreePredicate) {
-            MoveTreePredicate p = (MoveTreePredicate) n;
-            MoveTreePredicate p1 = (MoveTreePredicate) a;
-            MoveTreePredicate p2 = (MoveTreePredicate) b;
-            p.l = merge(p1.l, p2.l);
-            p.r = merge(p1.r, p2.r);
+        MoveTreePredicate foo = ((MoveTreePredicate) n);
+        MoveTreePredicate foo1 = ((MoveTreePredicate) a);
+        MoveTreePredicate foo2 = ((MoveTreePredicate) b);
+        if (Board.rng.nextBoolean()) {
+            foo.l = copy(foo1.l);
+            foo.r = copy(foo2.r);
+        } else {
+            foo.r = copy(foo1.r);
+            foo.l = copy(foo1.l);
         }
         return n;
     }
+
 
     public String toString() {
         return this.mTree.toString();

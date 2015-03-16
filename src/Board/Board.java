@@ -16,7 +16,7 @@ import java.util.*;
  * Created by ahanes on 2/15/15.
  */
 public class Board {
-    public static final Random rng = new Random(50);
+    public static final Random rng = new Random(5);
     public static final long MAX_TURNS = 1000;
     public static boolean Debug = false;
     private BoardSpawner spawnQueue;
@@ -41,7 +41,7 @@ public class Board {
     public static Board simpleBoard() throws Exception {
         Board b = new Board(new File("board.txt"));
         List<Actor> actors = new ArrayList<Actor>();
-        for (int i2 = 0; i2 < 4; ++i2) {
+        for (int i2 = 0; i2 < 6; ++i2) {
             Actor a = new Ghost(b);
             actors.add(a);
             b.registerActor(a);

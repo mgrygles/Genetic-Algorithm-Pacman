@@ -89,6 +89,7 @@ public class GeneticAlgorithmPlayer extends Player {
         List<BoardNode> choices = this.getLocation().getNeighbors(this);
         this.last = this.getLocation();
         Collections.shuffle(choices, Board.rng);
+        choices.remove(this.last);
         BoardNode choice = choices.get(0);
         int smallest = this.nearestEnergizer(choice);
         for (BoardNode b : choices) {
