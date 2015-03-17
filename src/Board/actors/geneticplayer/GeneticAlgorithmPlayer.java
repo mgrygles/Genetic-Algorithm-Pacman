@@ -77,7 +77,7 @@ public class GeneticAlgorithmPlayer extends Player {
         BoardNode choice = choices.get(0);
         int smallest = this.nearestGhost();
         for (BoardNode b : choices) {
-            if (this.nearestGhost(b) > smallest) {
+            if (this.nearestGhost(b) >= smallest) {
                 choice = b;
             }
         }
@@ -93,7 +93,7 @@ public class GeneticAlgorithmPlayer extends Player {
         BoardNode choice = choices.get(0);
         int smallest = this.nearestEnergizer(choice);
         for (BoardNode b : choices) {
-            if (this.nearestEnergizer(b) < smallest) {
+            if (this.nearestEnergizer(b) <= smallest) {
                 choice = b;
             }
         }

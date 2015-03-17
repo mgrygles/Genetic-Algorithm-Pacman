@@ -52,27 +52,27 @@ public class Main {
                         b.registerActor(ga);
                         plays.add(b);
                         long count = b.play();
-                        g.score += b.getPlayer().getScore()/count;
+                        g.score += b.getPlayer().getScore()/((float)count);
                     }
                 });
         }
         pool.shutdown();
         while (!pool.isTerminated()) {}
-        int avg = 0;
-        int max = 0;
+        double avg = 0;
+        double max = 0;
         for(GeneticTree x : trees) {
             if(max < x.score) {
                 max = x.score;
             }
             avg += x.score;
         }
-        System.out.println("Average = " + avg/trees.size());
-        System.out.println("Max = " + max);
+        //System.out.println("Average = " + avg/trees.size());
+        //System.out.println("Max = " + max);
         return trees;
     }
 
     public static List<GeneticTree> mate(List<GeneticTree> stuff) {
-        List<GeneticTree> n = new LinkedList<GeneticTree>(stuff.subList(0, stuff.size()/10));
+        List<GeneticTree> n = new LinkedList<GeneticTree>(stuff.subList(0, stuff.size()/5));
         List<GeneticTree> babies = new LinkedList<GeneticTree>(n);
         Collections.shuffle(stuff);
         while(babies.size() != stuff.size()) {
@@ -95,7 +95,7 @@ public class Main {
                 mate(l);
             }
             l = run(l);
-            Collections.sort(l, (x, y) -> y.score - x.score);
+            Collections.sort(l, (x, y) -> (int)(y.score - x.score));
         }
         System.out.println(l.get(0).toString());
         System.out.println("Hit next to play games");

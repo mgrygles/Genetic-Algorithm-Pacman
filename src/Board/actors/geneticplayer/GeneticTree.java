@@ -15,7 +15,7 @@ public class GeneticTree {
     private HashMap<Predicate<GeneticAlgorithmPlayer>, String> predicateToStr = new HashMap<>();
     private HashMap<MoveLambda, String> actionToStr = new HashMap<>();
     private MoveTree mTree;
-    public int score = 0;
+    public double score = 0;
     private int border = Board.rng.nextInt();
 
     public GeneticTree() {
@@ -32,6 +32,7 @@ public class GeneticTree {
         predicateToStr.put(predicates.get(3), "In Danger");
         predicateToStr.put(predicates.get(4), "Invulnerable");
         predicateToStr.put(predicates.get(5), "Nearest Energizer Safe");
+        /*
         List<Predicate<GeneticAlgorithmPlayer>> not_predicates = new ArrayList<Predicate<GeneticAlgorithmPlayer>>();
         for(Predicate<GeneticAlgorithmPlayer> p : predicates) {
             Predicate<GeneticAlgorithmPlayer> p2 = p.negate();
@@ -39,6 +40,7 @@ public class GeneticTree {
             predicateToStr.put(p2, "Not " + predicateToStr.get(p));
         }
         predicates.addAll(not_predicates);
+        */
 
         //terminals.add((p) -> (p.rand_move()));
         terminals.add((p) -> (p.safestMove()));
@@ -139,6 +141,8 @@ public class GeneticTree {
 
         @Override
         public BoardNode eval(GeneticAlgorithmPlayer player) {
+            if (Board.Debug)
+                System.out.println("Called " + this.n);
             return this.t.test(player) ? r.eval(player) : l.eval(player);
         }
 
@@ -158,7 +162,7 @@ public class GeneticTree {
 
         public BoardNode eval(GeneticAlgorithmPlayer player) {
             if (Board.Debug)
-                System.out.println("Called " + this.n);
+                System.out.println("Called " + this.n + "\n");
             return this.m.move(player);
         }
 
