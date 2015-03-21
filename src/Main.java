@@ -6,7 +6,6 @@ import ui.PacmanUI;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
 
@@ -35,7 +34,7 @@ public class Main {
     }
 
     public static List<GeneticTree> run(List<GeneticTree> trees) throws Exception {
-        ExecutorService pool = new ThreadPoolExecutor(4, 12, 15, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+        ExecutorService pool = new ThreadPoolExecutor(24, 36, 15, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
         ArrayList<Board> plays = new ArrayList<>(trees.size());
         for (GeneticTree g : trees) {
                 pool.execute(() -> {
@@ -74,7 +73,7 @@ public class Main {
     public static List<GeneticTree> mate(List<GeneticTree> stuff) {
         List<GeneticTree> n = new LinkedList<GeneticTree>(stuff.subList(0, stuff.size()/5));
         List<GeneticTree> babies = new LinkedList<GeneticTree>(n);
-        Collections.shuffle(stuff);
+        Collections.shuffle(stuff, Board.rng);
         while(babies.size() != stuff.size()) {
             int a = Board.rng.nextInt(n.size());
             int b = Board.rng.nextInt(n.size());
@@ -85,8 +84,8 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        int count = 20;
-        int gens = 25;
+        int count = 1000;
+        int gens = 1000;
         List<GeneticTree> l = firstPop(count);
         System.out.printf("Running with %d pacmen at %d generations\n", count, gens);
         for (int i = 0; i < gens; ++i) {
@@ -95,7 +94,7 @@ public class Main {
                 mate(l);
             }
             l = run(l);
-            Collections.sort(l, (x, y) -> (int)(y.score - x.score));
+            Collections.sort(l, (x, y) -> new Double(y.score).compareTo(x.score));
         }
         System.out.println(l.get(0).toString());
         System.out.println("Hit next to play games");

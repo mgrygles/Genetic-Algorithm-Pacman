@@ -3,6 +3,7 @@ package board.actors.geneticplayer;
 import board.Board;
 import board.tiles.BoardNode;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Predicate;
 
