@@ -65,8 +65,8 @@ public class Main {
             }
             avg += x.score;
         }
-        //System.out.println("Average = " + avg/trees.size());
-        //System.out.println("Max = " + max);
+        System.out.println("Average = " + avg/trees.size());
+        System.out.println("Max = " + max);
         return trees;
     }
 
