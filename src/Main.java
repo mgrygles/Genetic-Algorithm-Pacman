@@ -84,8 +84,11 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        int count = 30;
-        int gens = 25;
+        if(args.length != 2) {
+            System.err.println("Usage: count gens");
+        }
+        int count = Integer.parseInt(args[0]);
+        int gens = Integer.parseInt(args[1]);
         List<Chromosome> l = firstPop(count);
         System.out.printf("Running with %d pacmen at %d generations\n", count, gens);
         for (int i = 0; i < gens; ++i) {

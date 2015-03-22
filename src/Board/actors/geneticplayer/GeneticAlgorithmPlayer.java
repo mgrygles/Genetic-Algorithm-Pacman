@@ -106,14 +106,52 @@ public class GeneticAlgorithmPlayer extends Player {
         this.last = this.getLocation();
         Collections.shuffle(choices, Board.rng);
         BoardNode choice = choices.get(0);
+        int dist = 1000;
         for (BoardNode b : choices) {
             if (b instanceof WalkableNode && !((WalkableNode) b).hasWalked()) {
-                choice = b;
-                break;
+                if(nearestChain(b) < dist) {
+                    choice = b;
+                    dist = nearestChain(b);
+                }
             }
         }
         this.setLocation(choice);
         return this.getLocation();
+    }
+
+
+    public int nearestChain(BoardNode location) {
+        HashSet<BoardNode> ghostPos = new HashSet<BoardNode>();
+        for (Actor a : this.board.getActors()) {
+            if (a instanceof Ghost) {
+                ghostPos.add(a.getLocation());
+            }
+        }
+        Queue<BoardNode> q = new LinkedList<BoardNode>();
+        final HashSet<BoardNode> visited = new HashSet<BoardNode>();
+        HashMap<BoardNode, BoardNode> tree = new HashMap<BoardNode, BoardNode>();
+        BoardNode b = location;
+        q.add(b);
+        BoardNode last = b;
+        while (!q.isEmpty()) {
+            b = q.remove();
+            tree.put(b, last);
+            if (b instanceof WalkableNode && !((WalkableNode)b).hasWalked()) {
+                int count = 0;
+                while (tree.get(b) != location) {
+                    ++count;
+                }
+                return count;
+            }
+            last = b;
+            for (BoardNode n : b.getNeighbors(this)) {
+                if (!visited.contains(n)) {
+                    visited.add(n);
+                    q.add(n);
+                }
+            }
+        }
+        return 300; //Its far away
     }
 
     @Override
