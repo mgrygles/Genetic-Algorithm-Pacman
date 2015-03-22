@@ -15,15 +15,15 @@ import java.util.*;
 public class GeneticAlgorithmPlayer extends Player {
     public BoardNode last;
     public int border;
-    private GeneticTree decisionTree;
+    private Chromosome decisionTree;
 
     public GeneticAlgorithmPlayer(Board board) {
         super(board);
         this.border = Board.rng.nextInt(50);
-        decisionTree = new GeneticTree();
+        decisionTree = new Chromosome();
     }
 
-    public GeneticAlgorithmPlayer(Board board, GeneticTree t) {
+    public GeneticAlgorithmPlayer(Board board, Chromosome t) {
         super(board);
         this.border = Board.rng.nextInt(50);
         decisionTree = t;
@@ -33,14 +33,14 @@ public class GeneticAlgorithmPlayer extends Player {
     public GeneticAlgorithmPlayer(Board brd, GeneticAlgorithmPlayer a, GeneticAlgorithmPlayer b) {
         super(brd);
         this.border = Board.rng.nextInt(50);
-        decisionTree = new GeneticTree(a.decisionTree, b.decisionTree);
+        decisionTree = new Chromosome(a.decisionTree, b.decisionTree);
     }
 
-    public GeneticTree getDecisionTree() {
+    public Chromosome getDecisionTree() {
         return decisionTree;
     }
 
-    public void setDecisionTree(GeneticTree decisionTree) {
+    public void setDecisionTree(Chromosome decisionTree) {
         this.decisionTree = decisionTree;
     }
 
