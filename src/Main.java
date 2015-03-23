@@ -34,7 +34,7 @@ public class Main {
     }
 
     public static List<Chromosome> run(List<Chromosome> trees) throws Exception {
-        ExecutorService pool = new ThreadPoolExecutor(24, 36, 15, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+        ExecutorService pool = new ThreadPoolExecutor(24, 36, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
         ArrayList<Board> plays = new ArrayList<>(trees.size());
         for (Chromosome g : trees) {
                 pool.execute(() -> {
@@ -65,8 +65,10 @@ public class Main {
             }
             avg += x.score;
         }
-        System.out.println("Average = " + avg/trees.size());
-        System.out.println("Max = " + max);
+        if(Board.Debug) {
+            System.out.println("Average = " + avg/trees.size());
+            System.out.println("Max = " + max);
+        }
         return trees;
     }
 
@@ -97,10 +99,11 @@ public class Main {
             }
             l = run(l);
             Collections.sort(l, (x, y) -> new Double(y.score).compareTo(x.score));
-            System.out.println(l.get(0).toString());
+            if(Board.Debug)
+                System.out.println(l.get(0).toString());
         }
         System.out.println(l.get(0).toString());
-        System.out.println("Hit next to play games");
+        System.out.println("Hit enter to play games");
         new Scanner(System.in).nextLine();
         for(int i = 0; i < 4; ++i)
         drawGame(l.get(0));

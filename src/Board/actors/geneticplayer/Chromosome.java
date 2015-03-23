@@ -56,8 +56,8 @@ public class Chromosome {
         predicateToStr.put(predicates.get(4), "Invulnerable");
         predicateToStr.put(predicates.get(5), "Nearest Energizer Safe");
 
-        List<Predicate<GeneticAlgorithmPlayer>> not_predicates = new ArrayList<Predicate<GeneticAlgorithmPlayer>>();
         /*
+        List<Predicate<GeneticAlgorithmPlayer>> not_predicates = new ArrayList<Predicate<GeneticAlgorithmPlayer>>();
         for(Predicate<GeneticAlgorithmPlayer> p : predicates) {
             Predicate<GeneticAlgorithmPlayer> p2 = p.negate();
             not_predicates.add(p2);
@@ -65,7 +65,6 @@ public class Chromosome {
         }
         predicates.addAll(not_predicates);
         */
-
 
         //terminals.add((p) -> (p.rand_move()));
         terminals.add((p) -> (p.safestMove()));
@@ -148,9 +147,15 @@ public class Chromosome {
                 this.border++;
             }
         }
-        if(Board.rng.nextFloat() > .9) {
+        if(Board.rng.nextFloat() > .5 && false) {
             int index = Board.rng.nextInt(this.predicates.size());
-            this.predicates.set(index, this.predicates.get(index).and(this.all_predicates.get(Board.rng.nextInt(this.all_predicates.size()))));
+            int index2 = Board.rng.nextInt(this.all_predicates.size());
+            String s1, s2;
+            s1 = Chromosome.predicateToStr.get(this.predicates.get(index));
+            s2 = Chromosome.predicateToStr.get(this.all_predicates.get(index2));
+            Predicate<GeneticAlgorithmPlayer> combo = this.predicates.get(index).and(this.all_predicates.get(index2));
+            this.predicates.set(index, combo);
+            Chromosome.predicateToStr.put(combo, s1 + " && " + s2);
         }
     }
 

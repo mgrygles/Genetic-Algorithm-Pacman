@@ -95,7 +95,7 @@ public class GeneticAlgorithmPlayer extends Player {
         BoardNode choice = choices.get(0);
         int smallest = this.nearestEnergizer(choice);
         for (BoardNode b : choices) {
-            if (this.nearestEnergizer(b) <= smallest) {
+            if (this.nearestEnergizer(b) <= smallest && !this.last.equals(b)) {
                 choice = b;
                 smallest = this.nearestEnergizer(b);
             }
@@ -111,11 +111,9 @@ public class GeneticAlgorithmPlayer extends Player {
         BoardNode choice = choices.get(0);
         int dist = 1000;
         for (BoardNode b : choices) {
-            if (b instanceof WalkableNode && !((WalkableNode) b).hasWalked()) {
-                if(nearestChain(b) < dist) {
-                    choice = b;
-                    dist = nearestChain(b);
-                }
+            if(nearestChain(b) < dist && !this.last.equals(b)) {
+                choice = b;
+                dist = nearestChain(b);
             }
         }
         this.setLocation(choice);
@@ -142,6 +140,7 @@ public class GeneticAlgorithmPlayer extends Player {
             if (b instanceof WalkableNode && !((WalkableNode)b).hasWalked()) {
                 int count = 0;
                 while (tree.get(b) != location) {
+                    b = tree.get(b);
                     ++count;
                 }
                 return count;
@@ -182,7 +181,7 @@ public class GeneticAlgorithmPlayer extends Player {
     public int nearestGhost(BoardNode location) {
         HashSet<BoardNode> ghostPos = new HashSet<BoardNode>();
         for (Actor a : this.board.getActors()) {
-            if (a instanceof Ghost) {
+            if (a instanceof Ghost && a.isActive()) {
                 ghostPos.add(a.getLocation());
             }
         }
@@ -211,34 +210,13 @@ public class GeneticAlgorithmPlayer extends Player {
                 }
             }
         }
-        return 300; //Its far away
+        return 0; //Its far away
     }
 
 
     public boolean hasEnergizer(BoardNode location) {
-        HashSet<BoardNode> ghostPos = new HashSet<BoardNode>();
-        Queue<BoardNode> q = new LinkedList<BoardNode>();
-        final HashSet<BoardNode> visited = new HashSet<BoardNode>();
-        HashMap<BoardNode, BoardNode> tree = new HashMap<BoardNode, BoardNode>();
-        BoardNode b = location;
-        q.add(b);
-        BoardNode last = b;
-        while (!q.isEmpty()) {
-            b = q.remove();
-            tree.put(b, last);
-            if (b instanceof WalkableNode && ((WalkableNode) b).hasPowerup()) {
-                return true;
-            }
-            last = b;
-            for (BoardNode n : b.getNeighbors(this)) {
-                if (!visited.contains(n)) {
-                    visited.add(n);
-                    q.add(n);
-                }
-            }
+            return this.invulnTicks > 0;
         }
-        return false;
-    }
 
     public int nearestEnergizer(BoardNode location) {
         HashSet<BoardNode> ghostPos = new HashSet<BoardNode>();
@@ -298,7 +276,7 @@ public class GeneticAlgorithmPlayer extends Player {
                 }
             }
         }
-        return true;
+        return false;
     }
 
     @Override
