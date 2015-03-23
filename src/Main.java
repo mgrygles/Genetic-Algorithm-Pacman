@@ -39,7 +39,7 @@ public class Main {
         for (Chromosome g : trees) {
                 pool.execute(() -> {
                     g.score = 0;
-                    for (int i = 0; i < 5; ++i) {
+                    for (int i = 0; i < 10; ++i) {
                         Board b = null;
                         try {
                             b = Board.simpleBoard();
@@ -71,7 +71,7 @@ public class Main {
     }
 
     public static List<Chromosome> mate(List<Chromosome> stuff) {
-        List<Chromosome> n = new LinkedList<Chromosome>(stuff.subList(0, stuff.size()/5));
+        List<Chromosome> n = new LinkedList<Chromosome>(stuff.subList(0, stuff.size()/10));
         List<Chromosome> babies = new LinkedList<Chromosome>(n);
         Collections.shuffle(stuff, Board.rng);
         while(babies.size() != stuff.size()) {
@@ -98,6 +98,7 @@ public class Main {
             }
             l = run(l);
             Collections.sort(l, (x, y) -> new Double(y.score).compareTo(x.score));
+            System.out.println(l.get(0).toString());
         }
         System.out.println(l.get(0).toString());
         System.out.println("Hit next to play games");
