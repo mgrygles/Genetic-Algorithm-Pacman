@@ -73,7 +73,6 @@ public class Main {
     public static List<Chromosome> mate(List<Chromosome> stuff) {
         List<Chromosome> n = new LinkedList<Chromosome>(stuff.subList(0, stuff.size()/10));
         List<Chromosome> babies = new LinkedList<Chromosome>(n);
-        Collections.shuffle(stuff, Board.rng);
         while(babies.size() != stuff.size()) {
             int a = Board.rng.nextInt(n.size());
             int b = Board.rng.nextInt(n.size());

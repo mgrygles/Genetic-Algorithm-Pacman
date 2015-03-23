@@ -64,6 +64,7 @@ public class GeneticAlgorithmPlayer extends Player {
         for (BoardNode b : choices) {
             if (this.nearestGhost(b) < smallest) {
                 choice = b;
+                smallest = this.nearestGhost(b);
             }
         }
         this.setLocation(choice);
@@ -79,6 +80,7 @@ public class GeneticAlgorithmPlayer extends Player {
         for (BoardNode b : choices) {
             if (this.nearestGhost(b) >= smallest) {
                 choice = b;
+                smallest = this.nearestGhost(b);
             }
         }
         this.setLocation(choice);
@@ -95,6 +97,7 @@ public class GeneticAlgorithmPlayer extends Player {
         for (BoardNode b : choices) {
             if (this.nearestEnergizer(b) <= smallest) {
                 choice = b;
+                smallest = this.nearestEnergizer(b);
             }
         }
         this.setLocation(choice);
