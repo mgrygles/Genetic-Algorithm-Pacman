@@ -41,7 +41,7 @@ public class Board {
     public static Board simpleBoard() throws Exception {
         Board b = new Board(new File("board.txt"));
         List<Actor> actors = new ArrayList<Actor>();
-        for (int i2 = 0; i2 < 4; ++i2) {
+        for (int i2 = 0; i2 < 6; ++i2) {
             Actor a = new Ghost(b);
             actors.add(a);
             b.registerActor(a);

@@ -13,6 +13,11 @@ import java.util.function.Predicate;
 public class Chromosome {
     private List<Predicate<GeneticAlgorithmPlayer>> predicates = new ArrayList<Predicate<GeneticAlgorithmPlayer>>();
     private List<MoveLambda> terminals = new LinkedList<MoveLambda>();
+
+
+    private static List<Predicate<GeneticAlgorithmPlayer>> all_predicates = new ArrayList<Predicate<GeneticAlgorithmPlayer>>();
+    private static List<MoveLambda> all_terminals = new LinkedList<MoveLambda>();
+
     private HashMap<Predicate<GeneticAlgorithmPlayer>, String> predicateToStr = new HashMap<>();
     private HashMap<MoveLambda, String> actionToStr = new HashMap<>();
     private MoveTree mTree;
@@ -23,16 +28,14 @@ public class Chromosome {
         HashSet<Object> used = new HashSet<Object>();
         predicates.add((p) -> (p.nearestGhost(p.getLocation()) > border));
         predicates.add((p) -> (p.nearestEnergizer(p.getLocation()) > border));
-        predicates.add((p) -> (p.hasEnergizer(p.getLocation())));
         predicates.add((p) -> (p.inDanger()));
         predicates.add((p) -> (p.invulnerable()));
         predicates.add((p) -> (p.nearestEnergizerIsSafe(p.getLocation(), border)));
         predicateToStr.put(predicates.get(0), "Nearest Ghost");
         predicateToStr.put(predicates.get(1), "Nearest Energizer");
-        predicateToStr.put(predicates.get(2), "Has Energizer");
-        predicateToStr.put(predicates.get(3), "In Danger");
-        predicateToStr.put(predicates.get(4), "Invulnerable");
-        predicateToStr.put(predicates.get(5), "Nearest Energizer Safe");
+        predicateToStr.put(predicates.get(2), "In Danger");
+        predicateToStr.put(predicates.get(3), "Invulnerable");
+        predicateToStr.put(predicates.get(4), "Nearest Energizer Safe");
         /*
         List<Predicate<GeneticAlgorithmPlayer>> not_predicates = new ArrayList<Predicate<GeneticAlgorithmPlayer>>();
         for(Predicate<GeneticAlgorithmPlayer> p : predicates) {
@@ -53,6 +56,10 @@ public class Chromosome {
         actionToStr.put(terminals.get(1), "attack");
         actionToStr.put(terminals.get(2), "chain");
         actionToStr.put(terminals.get(3), "energizer");
+        if(Chromosome.all_terminals.size() == 0) {
+            Chromosome.all_terminals.addAll(this.terminals);
+            Chromosome.all_predicates.addAll(this.predicates);
+        }
         Collections.shuffle(terminals, Board.rng);
         this.mTree = this.buildMoveTree(5);
     }

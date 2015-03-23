@@ -209,11 +209,6 @@ public class GeneticAlgorithmPlayer extends Player {
         return 3000; //Its far away
     }
 
-
-    public boolean hasEnergizer(BoardNode location) {
-            return this.invulnTicks > 0;
-        }
-
     public int nearestEnergizer(BoardNode location) {
         HashSet<BoardNode> ghostPos = new HashSet<BoardNode>();
         Queue<BoardNode> q = new LinkedList<BoardNode>();
