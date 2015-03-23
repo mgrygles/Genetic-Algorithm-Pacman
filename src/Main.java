@@ -65,10 +65,8 @@ public class Main {
             }
             avg += x.score;
         }
-        if(Board.Debug) {
-            System.out.println("Average = " + avg/trees.size());
-            System.out.println("Max = " + max);
-        }
+        System.out.println("Average = " + avg/trees.size());
+        System.out.println("Max = " + max);
         return trees;
     }
 
@@ -106,6 +104,6 @@ public class Main {
         System.out.println("Hit enter to play games");
         new Scanner(System.in).nextLine();
         for(int i = 0; i < 4; ++i)
-        drawGame(l.get(0));
+            drawGame(l.get(0));
     }
 }
