@@ -20,7 +20,7 @@ public class Chromosome {
     private static final HashMap<Predicate<GeneticAlgorithmPlayer>, String> predicateToStr = new HashMap<>();
     private static final HashMap<MoveLambda, String> actionToStr = new HashMap<>();
     public double score = 0;
-    private int border = Board.rng.nextInt(300);
+    private int border = Board.rng.nextInt(35);
 
     public BoardNode move(GeneticAlgorithmPlayer player) {
         int i = 0;
