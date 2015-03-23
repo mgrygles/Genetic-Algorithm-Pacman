@@ -109,9 +109,9 @@ public class GeneticAlgorithmPlayer extends Player {
         this.last = this.getLocation();
         Collections.shuffle(choices, Board.rng);
         BoardNode choice = choices.get(0);
-        int dist = 1000;
+        int dist = 100000;
         for (BoardNode b : choices) {
-            if(nearestChain(b) < dist && !this.last.equals(b)) {
+            if(nearestChain(b) < dist) {
                 choice = b;
                 dist = nearestChain(b);
             }
@@ -170,10 +170,6 @@ public class GeneticAlgorithmPlayer extends Player {
         return nearestGhost() < 11;
     }
 
-    public boolean safe() {
-        return nearestGhost() > 40;
-    }
-
     public int nearestGhost() {
         return this.nearestGhost(this.getLocation());
     }
@@ -210,7 +206,7 @@ public class GeneticAlgorithmPlayer extends Player {
                 }
             }
         }
-        return 0; //Its far away
+        return 3000; //Its far away
     }
 
 

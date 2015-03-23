@@ -85,7 +85,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        if(args.length != 2) {
+        if(args.length < 2) {
             System.err.println("Usage: count gens");
         }
         int count = Integer.parseInt(args[0]);
