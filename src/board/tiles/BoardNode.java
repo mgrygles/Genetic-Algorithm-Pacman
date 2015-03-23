@@ -21,6 +21,7 @@ public abstract class BoardNode implements BoardDrawable {
     private int x;
     private int y;
     private List<Actor> actors;
+
     public BoardNode(int x, int y) throws DuplicateCoordinateException {
         this.x = x;
         this.y = y;

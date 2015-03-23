@@ -111,7 +111,7 @@ public class GeneticAlgorithmPlayer extends Player {
         BoardNode choice = choices.get(0);
         int dist = 100000;
         for (BoardNode b : choices) {
-            if(nearestChain(b) < dist) {
+            if (nearestChain(b) < dist) {
                 choice = b;
                 dist = nearestChain(b);
             }
@@ -137,7 +137,7 @@ public class GeneticAlgorithmPlayer extends Player {
         while (!q.isEmpty()) {
             b = q.remove();
             tree.put(b, last);
-            if (b instanceof WalkableNode && !((WalkableNode)b).hasWalked()) {
+            if (b instanceof WalkableNode && !((WalkableNode) b).hasWalked()) {
                 int count = 0;
                 while (tree.get(b) != location) {
                     b = tree.get(b);

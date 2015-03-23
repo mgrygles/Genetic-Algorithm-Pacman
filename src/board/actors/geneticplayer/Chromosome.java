@@ -3,7 +3,6 @@ package board.actors.geneticplayer;
 import board.Board;
 import board.tiles.BoardNode;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -11,17 +10,14 @@ import java.util.function.Predicate;
  * Created by ahanes on 3/14/15.
  */
 public class Chromosome {
-    private List<Predicate<GeneticAlgorithmPlayer>> predicates = new ArrayList<Predicate<GeneticAlgorithmPlayer>>();
-    private List<MoveLambda> terminals = new LinkedList<MoveLambda>();
-
-
     private static List<Predicate<GeneticAlgorithmPlayer>> all_predicates = new ArrayList<Predicate<GeneticAlgorithmPlayer>>();
     private static List<MoveLambda> all_terminals = new LinkedList<MoveLambda>();
-
+    public double score = 0;
+    private List<Predicate<GeneticAlgorithmPlayer>> predicates = new ArrayList<Predicate<GeneticAlgorithmPlayer>>();
+    private List<MoveLambda> terminals = new LinkedList<MoveLambda>();
     private HashMap<Predicate<GeneticAlgorithmPlayer>, String> predicateToStr = new HashMap<>();
     private HashMap<MoveLambda, String> actionToStr = new HashMap<>();
     private MoveTree mTree;
-    public double score = 0;
     private int border = Board.rng.nextInt();
 
     public Chromosome() {
@@ -56,7 +52,7 @@ public class Chromosome {
         actionToStr.put(terminals.get(1), "attack");
         actionToStr.put(terminals.get(2), "chain");
         actionToStr.put(terminals.get(3), "energizer");
-        if(Chromosome.all_terminals.size() == 0) {
+        if (Chromosome.all_terminals.size() == 0) {
             Chromosome.all_terminals.addAll(this.terminals);
             Chromosome.all_predicates.addAll(this.predicates);
         }
@@ -65,7 +61,7 @@ public class Chromosome {
     }
 
     public Chromosome(Chromosome a, Chromosome b) {
-        this.border = (Board.rng.nextBoolean() ?  a.border : b.border);
+        this.border = (Board.rng.nextBoolean() ? a.border : b.border);
         this.mTree = merge(a.mTree, b.mTree);
     }
 
@@ -86,7 +82,7 @@ public class Chromosome {
     }
 
     public void mutate() {
-        if(Board.rng.nextFloat() > .95) {
+        if (Board.rng.nextFloat() > .95) {
             Chromosome g = new Chromosome(this, new Chromosome());
             this.mTree = g.mTree;
         }
