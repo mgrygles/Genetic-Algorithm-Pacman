@@ -125,6 +125,6 @@ public class Main {
         System.out.println("Hit enter to play games");
         new Scanner(System.in).nextLine();
         for(int i = 0; i < 4; ++i)
-            drawGame(l.get(0));
+            drawGame(fame.lastEntry().getValue());
     }
 }
