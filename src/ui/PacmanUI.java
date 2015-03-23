@@ -27,7 +27,6 @@ public class PacmanUI extends JFrame {
         this.setSize(new Dimension(500, 500));
         this.setLocationRelativeTo(null);
         this.gbl = new GridLayout(b.getRows(), b.getCols());
-        this.setLayout(gbl);
         map = new HashMap<CoordPair, JLabel>();
         for (BoardNode[] row : b.getBoard()) {
             for (BoardNode node : row) {
@@ -40,8 +39,12 @@ public class PacmanUI extends JFrame {
                 this.add(n);
             }
         }
+        this.setLayout(gbl);
+        this.pack();
+        Insets insets = this.getInsets();
+        this.setSize(new Dimension(insets.left + insets.right + 500,
+                insets.top + insets.bottom + 500));
         this.revalidate();
-
     }
 
     public void redrawGrid(Board b) {
