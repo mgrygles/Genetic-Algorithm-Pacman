@@ -106,16 +106,16 @@ public class GeneticAlgorithmPlayer extends Player {
 
     public BoardNode chain_move() {
         List<BoardNode> choices = this.getLocation().getNeighbors(this);
-        this.last = this.getLocation();
         Collections.shuffle(choices, Board.rng);
         BoardNode choice = choices.get(0);
         int dist = 100000;
         for (BoardNode b : choices) {
-            if (nearestChain(b) < dist) {
+            if (nearestChain(b) < dist && this.last != null && !this.last.equals(b) && !((WalkableNode)b).hasPowerup()) {
                 choice = b;
                 dist = nearestChain(b);
             }
         }
+        this.last = this.getLocation();
         this.setLocation(choice);
         return this.getLocation();
     }

@@ -18,15 +18,17 @@ public class Chromosome {
     private HashMap<Predicate<GeneticAlgorithmPlayer>, String> predicateToStr = new HashMap<>();
     private HashMap<MoveLambda, String> actionToStr = new HashMap<>();
     private MoveTree mTree;
-    private int border = Board.rng.nextInt();
+    private int border_ghost = Board.rng.nextInt(5);
+    private int border_energizer = Board.rng.nextInt(5);
+    private int border_safeenergizer = Board.rng.nextInt(15);
 
     public Chromosome() {
         HashSet<Object> used = new HashSet<Object>();
-        predicates.add((p) -> (p.nearestGhost(p.getLocation()) > border));
-        predicates.add((p) -> (p.nearestEnergizer(p.getLocation()) > border));
+        predicates.add((p) -> (p.nearestGhost(p.getLocation()) > border_ghost));
+        predicates.add((p) -> (p.nearestEnergizer(p.getLocation()) > border_energizer));
         predicates.add((p) -> (p.inDanger()));
         predicates.add((p) -> (p.invulnerable()));
-        predicates.add((p) -> (p.nearestEnergizerIsSafe(p.getLocation(), border)));
+        predicates.add((p) -> (p.nearestEnergizerIsSafe(p.getLocation(), border_safeenergizer)));
         predicateToStr.put(predicates.get(0), "Nearest Ghost");
         predicateToStr.put(predicates.get(1), "Nearest Energizer");
         predicateToStr.put(predicates.get(2), "In Danger");
@@ -39,8 +41,7 @@ public class Chromosome {
             not_predicates.add(p2);
             predicateToStr.put(p2, "Not " + predicateToStr.get(p));
         }
-        predicates.addAll(not_predicates);
-        */
+        predicates.addAll(not_predicates);*/
 
         //terminals.add((p) -> (p.rand_move()));
         terminals.add((p) -> (p.safestMove()));
@@ -57,11 +58,13 @@ public class Chromosome {
             Chromosome.all_predicates.addAll(this.predicates);
         }
         Collections.shuffle(terminals, Board.rng);
-        this.mTree = this.buildMoveTree(5);
+        this.mTree = this.buildMoveTree(4);
     }
 
     public Chromosome(Chromosome a, Chromosome b) {
-        this.border = (Board.rng.nextBoolean() ? a.border : b.border);
+        this.border_energizer = (Board.rng.nextBoolean() ? a.border_energizer : b.border_energizer);
+        this.border_ghost = (Board.rng.nextBoolean() ? a.border_ghost: b.border_ghost);
+        this.border_safeenergizer= (Board.rng.nextBoolean() ? a.border_safeenergizer: b.border_safeenergizer);
         this.mTree = merge(a.mTree, b.mTree);
     }
 
@@ -82,9 +85,20 @@ public class Chromosome {
     }
 
     public void mutate() {
-        if (Board.rng.nextFloat() > .95) {
+        if (Board.rng.nextFloat() > .65) {
             Chromosome g = new Chromosome(this, new Chromosome());
             this.mTree = g.mTree;
+        }
+        if(Board.rng.nextBoolean()) {
+            if(Board.rng.nextBoolean()) {
+                this.border_energizer = this.border_energizer + Board.rng.nextInt((this.border_energizer/2)+1);
+                this.border_ghost= this.border_ghost+ Board.rng.nextInt((this.border_ghost/2)+1);
+                this.border_safeenergizer= this.border_safeenergizer+ Board.rng.nextInt((this.border_safeenergizer/2)+1);
+            } else {
+                this.border_energizer = this.border_energizer - Board.rng.nextInt((this.border_energizer/2)+1);
+                this.border_ghost= this.border_ghost - Board.rng.nextInt((this.border_ghost/2)+1);
+                this.border_safeenergizer= this.border_safeenergizer - Board.rng.nextInt((this.border_safeenergizer/2)+1);
+            }
         }
     }
 
@@ -110,7 +124,8 @@ public class Chromosome {
 
 
     public String toString() {
-        return this.mTree.toString();
+        return "Borders: \n\tSafe Energizer: " +this.border_safeenergizer + "\n\tGhost:" + this.border_ghost +
+                "\n\tEnergizer:" + this.border_energizer + "\n" + this.mTree.toString();
     }
 
     private MoveTree copy(MoveTree a) {

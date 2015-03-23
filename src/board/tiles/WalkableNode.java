@@ -48,7 +48,7 @@ public class WalkableNode extends BoardNode {
         if (this.hasPowerup && a instanceof Player) {
             this.hasPowerup = false;
             ((Player) a).addInvuln(20);
-            ((Player) a).incrScore(-200);
+            ((Player) a).incrScore(-100);
         }
         super.activate(a);
     }
