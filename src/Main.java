@@ -2,12 +2,16 @@ import board.Board;
 import board.actors.Player;
 import board.actors.geneticplayer.GeneticAlgorithmPlayer;
 import board.actors.geneticplayer.Chromosome;
+import javafx.util.Pair;
 import ui.PacmanUI;
 
+import javax.swing.tree.TreePath;
 import java.util.*;
 import java.util.concurrent.*;
 
 public class Main {
+
+    public static TreeMap<Double, Chromosome> fame = new TreeMap<>();
 
     public static List<Chromosome> firstPop(int count) {
         List<Chromosome> l = new ArrayList<>(count);
@@ -73,11 +77,15 @@ public class Main {
     public static List<Chromosome> mate(List<Chromosome> stuff) {
         List<Chromosome> n = new LinkedList<Chromosome>(stuff.subList(0, stuff.size()/10));
         List<Chromosome> babies = new LinkedList<Chromosome>(n);
+        int ptr = 1;
         while(babies.size() != stuff.size()) {
-            int a = Board.rng.nextInt(n.size());
-            int b = Board.rng.nextInt(n.size());
-            babies.add(new Chromosome(n.get(a), n.get(b)));
+            if(ptr >= n.size()) {
+                ptr = 1;
+            }
+            int b = Board.rng.nextInt(ptr);
+            babies.add(new Chromosome(n.get(ptr), n.get(b)));
             babies.get(babies.size() - 1).mutate();
+            ++ptr;
         }
         return babies;
     }
@@ -88,6 +96,7 @@ public class Main {
         }
         int count = Integer.parseInt(args[0]);
         int gens = Integer.parseInt(args[1]);
+        int famecount = 5;
         List<Chromosome> l = firstPop(count);
         System.out.printf("Running with %d pacmen at %d generations\n", count, gens);
         for (int i = 0; i < gens; ++i) {
@@ -95,9 +104,22 @@ public class Main {
             if (i != 0) {
                 mate(l);
             }
+            new ArrayList<>(l.subList(0, famecount)).forEach(x -> fame.put(x.score, x));
+            ArrayList<Map.Entry<Double, Chromosome>> best = new ArrayList<>();
+            for(int i2 = 0; i2 < famecount; ++i2) {
+                if(!fame.isEmpty()) {
+                    Map.Entry<Double, Chromosome> e = fame.lastEntry();
+                    fame.remove(e.getKey());
+                    l.add(e.getValue());
+                    best.add(e);
+                }
+            }
+            fame = new TreeMap<>();
+            best.forEach(x -> fame.put(x.getKey(), x.getValue()));
             l = run(l);
             Collections.sort(l, (x, y) -> new Double(y.score).compareTo(x.score));
             System.out.println(l.get(0).toString());
+            l.forEach(x -> fame.put(x.score, x));
         }
         System.out.println(l.get(0).toString());
         System.out.println("Hit enter to play games");
