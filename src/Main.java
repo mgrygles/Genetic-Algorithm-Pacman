@@ -97,8 +97,7 @@ public class Main {
             }
             l = run(l);
             Collections.sort(l, (x, y) -> new Double(y.score).compareTo(x.score));
-            if(Board.Debug)
-                System.out.println(l.get(0).toString());
+            System.out.println(l.get(0).toString());
         }
         System.out.println(l.get(0).toString());
         System.out.println("Hit enter to play games");

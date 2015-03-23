@@ -16,7 +16,7 @@ import java.util.*;
  * Created by ahanes on 2/15/15.
  */
 public class Board {
-    public static final Random rng = new Random(5);
+    public static final Random rng = new Random(2);
     public static final long MAX_TURNS = 1000;
     public static boolean Debug = false;
     private BoardSpawner spawnQueue;
