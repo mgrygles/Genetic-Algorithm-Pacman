@@ -2,10 +2,7 @@ import board.Board;
 import board.actors.Player;
 import board.actors.geneticplayer.GeneticAlgorithmPlayer;
 import board.actors.geneticplayer.Chromosome;
-import javafx.util.Pair;
 import ui.PacmanUI;
-
-import javax.swing.tree.TreePath;
 import java.util.*;
 import java.util.concurrent.*;
 
