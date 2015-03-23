@@ -27,7 +27,7 @@ public class Main {
         while (!board.isOver()) {
             board.boardTick();
             u.redrawGrid(board);
-            Thread.sleep(200);
+            Thread.sleep(100);
         }
         System.out.println("Game Over");
         System.out.printf("Score: %d\n", p.getScore());
